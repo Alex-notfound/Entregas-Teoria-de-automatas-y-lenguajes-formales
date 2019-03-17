@@ -1,0 +1,4 @@
+NOTAS
+
+No se ha introducido [+-] en las expresiones regulares sobre numeros debido a que en el enunciado solo aparece especificado para
+la constante real con mantisa y exponente.
