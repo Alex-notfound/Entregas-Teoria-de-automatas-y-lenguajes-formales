@@ -29,21 +29,23 @@ OPERADORES_ARITMETICOS ([*/%+-]|"--"|"++"|"*="|"/="|"%="|"+="|"-=")
 
 {DELIMITADORES} printf("\nLinea %d, delimitador: %s", linea, yytext);
 {RESERVADAS} printf("\nLinea %d, palabra reservada: %s", linea, yytext);
+{COMENTARIOS} printf("\nLinea %d, comentario: %s", linea, yytext);
+{IDENTIFICADORES} printf("\nLinea %d, identificador: %s", linea, yytext);
+
 {CONSTANTE_ENTERA_OCTAL} printf("\nLinea %d, constante entero octal: %s", linea, yytext);
 {CONSTANTE_ENTERA_DECIMAL} printf("\nLinea %d, palabra reservada: %s", linea, yytext);
 {CONSTANTE_ENTERA_HEXADECIMAL} printf("\nLinea %d, CONSTANTE_ENTERA_HEXADECIMAL: %s", linea, yytext);
 {CONSTANTE_REAL_SIN_EXPONENTE} printf("\nLinea %d, CONSTANTE_REAL_SIN_EXPONENTE: %s", linea, yytext);
 {CONSTANTE_REAL_EXPONENTE} printf("\nLinea %d, CONSTANTE_REAL_EXPONENTE: %s", linea, yytext);
-{OPERADORES_ACCESO_MEMORIA} printf("\nLinea %d, operador de acceso a memoria: %s", linea, yytext);
-{OPERADORES_BITS} printf("\nLinea %d, operador de bits: %s", linea, yytext);
-{OPERADORES_RELACIONALES} printf("\nLinea %d, operador relacional: %s", linea, yytext);
-{OPERADORES_LOGICOS} printf("\nLinea %d, operador logico: %s", linea, yytext);
-{OPERADORES_VARIOS} printf("\nLinea %d, otro operador: %s", linea, yytext);
 {CONSTANTE_CADENA} printf("\nLinea %d, CONSTANTE_CADENA: %s", linea, yytext);
 {CONSTANTE_CARACTER} printf("\nLinea %d, caracter: %s", linea, yytext);
-{COMENTARIOS} printf("\nLinea %d, comentario: %s", linea, yytext);
-{OPERADORES_ARITMETICOS} printf("\nLinea %d, operador aritmetico: %s", linea, yytext);
-{IDENTIFICADORES} printf("\nLinea %d, identificador: %s", linea, yytext);
+
+{OPERADORES_ACCESO_MEMORIA} printf("\nLinea %d, operador: %s", linea, yytext);
+{OPERADORES_BITS} printf("\nLinea %d, operador: %s", linea, yytext);
+{OPERADORES_RELACIONALES} printf("\nLinea %d, operador: %s", linea, yytext);
+{OPERADORES_LOGICOS} printf("\nLinea %d, operador logico: %s", linea, yytext);
+{OPERADORES_VARIOS} printf("\nLinea %d, otro operador: %s", linea, yytext);
+{OPERADORES_ARITMETICOS} printf("\nLinea %d, operador: %s", linea, yytext);
 
 %%
 
