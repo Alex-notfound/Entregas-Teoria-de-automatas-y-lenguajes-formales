@@ -1,0 +1,82 @@
+linea 1, palabra reservada: namespace
+linea 1, identificador: inutil
+linea 1, delimitador: {
+linea 2, palabra reservada: using
+linea 2, identificador: standard
+linea 2, operador: .
+linea 2, identificador: math
+linea 2, delimitador: ;
+linea 3, palabra reservada: using
+linea 3, identificador: standard
+linea 3, operador: .
+linea 3, identificador: io
+linea 3, delimitador: ;
+linea 5, palabra reservada: double
+linea 5, identificador: PI
+linea 5, ctc real: 31.41592e-1
+linea 5, delimitador: ;
+linea 7, palabra reservada: int
+linea 7, identificador: main
+linea 7, delimitador: (
+linea 7, palabra reservada: int
+linea 7, identificador: argc
+linea 7, delimitador: ,
+linea 7, palabra reservada: char
+linea 7, operador: *
+linea 7, identificador: argv
+linea 7, operador: [
+linea 7, operador: ]
+linea 7, delimitador: )
+linea 7, delimitador: {
+linea 9, palabra reservada: float
+linea 9, identificador: area
+linea 9, delimitador: ,
+linea 9, identificador: radio
+linea 9, delimitador: ;
+linea 11, identificador: printf
+linea 11, delimitador: (
+linea 11, cadena: "\nRadio de la /*circunferencia*/\
+\151\144\x69\157\x74\141: "
+linea 12, delimitador: )
+linea 12, delimitador: ;
+linea 13, identificador: scanf
+linea 13, delimitador: (
+linea 13, cadena: "%f"
+linea 13, delimitador: ,
+linea 13, operador: &
+linea 13, identificador: radio
+linea 13, delimitador: )
+linea 13, delimitador: ;
+linea 15, identificador: printf
+linea 15, delimitador: (
+linea 15, cadena: "\\hola22"
+linea 15, delimitador: )
+linea 15, delimitador: ;
+linea 18, identificador: area
+linea 18, operador: =
+linea 18, identificador: PI
+linea 18, operador: *
+linea 18, identificador: pow
+linea 18, delimitador: (
+linea 18, identificador: radio
+linea 18, delimitador: ,
+linea 18, ctc entera: 2
+linea 18, delimitador: )
+linea 18, delimitador: ;
+linea 22, identificador: printf
+linea 22, delimitador: (
+linea 22, cadena: "\nArea de la \"circunferencia\": %f"
+linea 22, delimitador: ,
+linea 22, identificador: area
+linea 22, delimitador: )
+linea 22, delimitador: ;
+linea 22, identificador: printf
+linea 22, delimitador: (
+linea 22, cadena: "\n"
+linea 22, delimitador: )
+linea 22, delimitador: ;
+linea 24, palabra reservada: return
+linea 24, ctc entera: 0
+linea 24, delimitador: ;
+linea 25, delimitador: }
+linea 26, delimitador: }
