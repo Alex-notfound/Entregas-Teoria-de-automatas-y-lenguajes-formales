@@ -5,7 +5,7 @@
 %} 
 
 RESERVADAS (auto|base|boolean|break|case|catch|class|char|continue|default|do|double|else|enum|extern|false|finally|float|for|goto|if|include|int|interface|long|namespace|new|override|private|protected|public|return|sealed|short|signed|sizeof|static|struct|switch|this|throw|true|typedef|union|unsigned|using|virtual|void|while)
-IDENTIFICADORES ([A-Za-z_][0-9]*)
+IDENTIFICADORES ([A-Za-z_][A-Za-z_0-9]*)
 CARACTERES_ESCAPADOS (\\'|\\?|\\\\|\\n|\\r|\\t|\\v)
 CONSTANTE_ENTERA_OCTAL (0[0-7]+)
 CONSTANTE_ENTERA_DECIMAL ([0-9]+)
@@ -43,6 +43,7 @@ OPERADORES_ARITMETICOS ([*/%+-]|"--"|"++"|"*="|"/="|"%="|"+="|"-=")
 {CONSTANTE_CARACTER} printf("\nLinea %d, caracter: %s", linea, yytext);
 {COMENTARIOS} printf("\nLinea %d, comentario: %s", linea, yytext);
 {OPERADORES_ARITMETICOS} printf("\nLinea %d, operador aritmetico: %s", linea, yytext);
+{IDENTIFICADORES} printf("\nLinea %d, identificador: %s", linea, yytext);
 
 %%
 
