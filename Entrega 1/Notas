@@ -3,7 +3,14 @@ NOTAS
 No se ha introducido [+-] en las expresiones regulares sobre numeros debido a que en el enunciado solo aparece especificado para
 la constante real con mantisa y exponente.
 
+Al introducir en CARACTERES_ESCAPADOS \\" no lo reconoce
+
 En Constantes (Caracteres), para el numero hexadecimal he considerado que el caracter puede comenzar por \x como indica el enunciado
 
 Duda: Los caracteres dicen que estan formados por 2 comillas simples que iran antes y despues de un unico caracter, excepto la comilla simple, el backslash ’\’ o ¿¿¿¿el salto de linea????
 
+------------
+Falta por hacer:
+
+Normas para:
+	Identificadores
