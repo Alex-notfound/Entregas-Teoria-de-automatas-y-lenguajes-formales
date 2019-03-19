@@ -1,8 +1,9 @@
 %{
-   #include <string.h>
-   #include <stdlib.h> 
-   int linea = 1;
-   char cadena[256] = ""; 
+	#include <string.h>
+	#include <stdlib.h> 
+   	int linea = 1;
+   	int i = 0;
+   	char cadena[256] = ""; 
 %} 
 
 %x COMENTARIO
@@ -53,9 +54,9 @@ OPERADORES_ARITMETICOS ([*/%+-]|"--"|"++"|"*="|"/="|"%="|"+="|"-=")
 <COMENTARIO>.			;
 <COMENTARIO>\*\/		BEGIN 0;
 
-\"{CONSTANTE_CADENA}		BEGIN(CADENA);strcat(cadena, yytext);
-<CADENA>\n			linea++;strcat(cadena, yytext);
-<CADENA>{CONSTANTE_CADENA}*\"	BEGIN 0;strcat(cadena, yytext); printf("\nlinea %d, constante cadena: %s", linea, cadena);strcpy(cadena,"");
+\"		BEGIN(CADENA);strcat(cadena, yytext);
+<CADENA>\n			i++;linea++;strcat(cadena, yytext);
+<CADENA>\"	BEGIN 0;strcat(cadena, yytext); printf("\nlinea %d, constante cadena: %s", linea-i, cadena);i=0;strcpy(cadena,"");
 <CADENA>{CONSTANTE_CADENA}		strcat(cadena,yytext);
 
 %%
