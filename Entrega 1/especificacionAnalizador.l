@@ -10,7 +10,7 @@
 
 RESERVADAS (auto|base|boolean|break|case|catch|class|char|continue|default|do|double|else|enum|extern|false|finally|float|for|goto|if|include|int|interface|long|namespace|new|override|private|protected|public|return|sealed|short|signed|sizeof|static|struct|switch|this|throw|true|typedef|union|unsigned|using|virtual|void|while)
 IDENTIFICADORES ([A-Za-z_][A-Za-z_0-9]*)
-CARACTERES_ESCAPADOS (\\'|\\?|\\\\|\\n|\\r|\\t|\\v)
+CARACTERES_ESCAPADOS (\\'|\\\"|\\?|\\\\|\\n|\\r|\\t|\\v)
 CONSTANTE_ENTERA_OCTAL (0[0-7]+)
 CONSTANTE_ENTERA_DECIMAL ([0-9]+)
 CONSTANTE_ENTERA_HEXADECIMAL (0[xX][0-9a-fA-F]+)
@@ -24,8 +24,8 @@ OPERADORES_LOGICOS (!|"&&"|"||")
 OPERADORES_VARIOS (=|sizeof)
 COMENTARIOS_UNA_LINEA (\/\/.*\n)
 COMENTARIOS_MULTILINEA (\/\*)
-CONSTANTE_CADENA ([^\\\"\n]*|{CARACTERES_ESCAPADOS}|\\[0-3]?[0-7]{1,2}|\\x[0-9a-fA-f]{1,2}|([^\n\\\"]*\\\n)*)
-CONSTANTE_CARACTER ([^\\\'\n]|{CARACTERES_ESCAPADOS}|\\[0-3]?[0-7]{1,2}|\\x[0-9a-fA-f]{1,2})
+CONSTANTE_CADENA ([^\\\n\"]*|{CARACTERES_ESCAPADOS}|\\[0-3]?[0-7]{1,2}|\\x[0-9a-fA-f]{1,2}|\\\n)
+CONSTANTE_CARACTER ([^\\\'\n\"]|{CARACTERES_ESCAPADOS}|\\[0-3]?[0-7]{1,2}|\\x[0-9a-fA-f]{1,2})*
 OPERADORES_ARITMETICOS ([*/%+-]|"--"|"++"|"*="|"/="|"%="|"+="|"-=")
 
 %%
@@ -53,10 +53,10 @@ OPERADORES_ARITMETICOS ([*/%+-]|"--"|"++"|"*="|"/="|"%="|"+="|"-=")
 <COMENTARIO>.			;
 <COMENTARIO>\*\/		BEGIN 0;
 
+
 \"{CONSTANTE_CADENA}		BEGIN(CADENA);strcat(cadena, yytext);
 <CADENA>\n			linea++;strcat(cadena, yytext);
-
-<CADENA>.*\"		BEGIN 0;strcat(cadena, yytext); printf("\nlinea %d, constante cadena: %s", linea, cadena);strcpy(cadena,"");
+<CADENA>{CONSTANTE_CADENA}*\"	BEGIN 0;strcat(cadena, yytext); printf("\nlinea %d, constante cadena: %s", linea, cadena);strcpy(cadena,"");
 <CADENA>{CONSTANTE_CADENA}		strcat(cadena,yytext);
 
 %%
