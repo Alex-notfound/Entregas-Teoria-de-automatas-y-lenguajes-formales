@@ -7,8 +7,6 @@ la constante real con mantisa y exponente.
 
 -En linea 5 del fichero de pruebas, la salida del PDF detecta un delimitador ";" que no existe.
 
--He considerado añadir un printf para cuando detecte comentarios, aunque en la salida del enunciado no aparecen.
-
 ------------
 Falta por hacer:
 
