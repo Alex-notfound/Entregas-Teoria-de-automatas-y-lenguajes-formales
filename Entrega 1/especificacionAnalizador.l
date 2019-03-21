@@ -25,8 +25,8 @@ OPERADORES_LOGICOS (!|"&&"|"||")
 OPERADORES_VARIOS (=|sizeof)
 COMENTARIOS_UNA_LINEA (\/\/.*\n)
 COMENTARIOS_MULTILINEA (\/\*)
-CONSTANTE_CADENA ([^\\\n\"]*|{CARACTERES_ESCAPADOS}|\\[0-3]?[0-7]{1,2}|\\x[0-9a-fA-f]{1,2}|\\\n)
-CONSTANTE_CARACTER ([^\\\'\n\"]|{CARACTERES_ESCAPADOS}|\\[0-3]?[0-7]{1,2}|\\x[0-9a-fA-f]{1,2})*
+CONSTANTE_CADENA ([^\\\n"]*|{CARACTERES_ESCAPADOS}|\\[0-3]?[0-7]{1,2}|\\x[0-9a-fA-f]{1,2})
+CONSTANTE_CARACTER '([^\\'\n]|{CARACTERES_ESCAPADOS}|\\[0-3]?[0-7]{1,2}|\\x[0-9a-fA-f]{1,2})'
 OPERADORES_ARITMETICOS ([*/%+-]|"--"|"++"|"*="|"/="|"%="|"+="|"-=")
 
 %%
@@ -41,7 +41,7 @@ OPERADORES_ARITMETICOS ([*/%+-]|"--"|"++"|"*="|"/="|"%="|"+="|"-=")
 {CONSTANTE_ENTERA_HEXADECIMAL} printf("\nlinea %d, constante entera hexadecimal: %s", linea, yytext);
 {CONSTANTE_REAL_SIN_EXPONENTE} printf("\nlinea %d, constante real sin exponente: %s", linea, yytext);
 {CONSTANTE_REAL_EXPONENTE} printf("\nlinea %d, constante real con exponente: %s", linea, yytext);
-'{CONSTANTE_CARACTER}' printf("\nlinea %d, constante caracter: %s", linea, yytext);
+{CONSTANTE_CARACTER} printf("\nlinea %d, constante caracter: %s", linea, yytext);
 {OPERADORES_ACCESO_MEMORIA} printf("\nlinea %d, operador: %s", linea, yytext);
 {OPERADORES_BITS} printf("\nlinea %d, operador: %s", linea, yytext);
 {OPERADORES_RELACIONALES} printf("\nlinea %d, operador: %s", linea, yytext);
@@ -55,7 +55,7 @@ OPERADORES_ARITMETICOS ([*/%+-]|"--"|"++"|"*="|"/="|"%="|"+="|"-=")
 <COMENTARIO>\*\/		BEGIN 0;
 
 \"		BEGIN(CADENA);strcat(cadena, yytext);
-<CADENA>\n			i++;linea++;strcat(cadena, yytext);
+<CADENA>\\\n			i++;linea++;strcat(cadena, yytext);
 <CADENA>\"	BEGIN 0;strcat(cadena, yytext); printf("\nlinea %d, constante cadena: %s", linea-i, cadena);i=0;strcpy(cadena,"");
 <CADENA>{CONSTANTE_CADENA}		strcat(cadena,yytext);
 
@@ -72,4 +72,4 @@ int main(int argc, char *argv [])
   yylex();
   printf("\n\n");
   fclose(yyin);
-}
+} 
