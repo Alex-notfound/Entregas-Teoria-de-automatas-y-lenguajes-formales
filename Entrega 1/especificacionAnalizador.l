@@ -59,6 +59,8 @@ OPERADORES_ARITMETICOS ([*/%+-]|"--"|"++"|"*="|"/="|"%="|"+="|"-=")
 <CADENA>\"	BEGIN 0;strcat(cadena, yytext); printf("\nlinea %d, constante cadena: %s", linea-i, cadena);i=0;strcpy(cadena,"");
 <CADENA>{CONSTANTE_CADENA}		strcat(cadena,yytext);
 
+. printf("\nlinea %d, ERROR: %s", linea, yytext);
+
 %%
 
 int yywrap() 
