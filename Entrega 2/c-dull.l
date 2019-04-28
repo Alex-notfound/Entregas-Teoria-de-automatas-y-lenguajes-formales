@@ -37,13 +37,13 @@ OPERADORES_ARITMETICOS ([*/%+-]|"--"|"++"|"*="|"/="|"%="|"+="|"-=")
 {DELIMITADORES} printf("\nlinea %d, delimitador: %s", linea, yytext); return yylex();
 {RESERVADAS} printf("\nlinea %d, palabra reservada: %s", linea, yytext); return yylex();
 {COMENTARIOS_UNA_LINEA} linea++; return yylex();
-{IDENTIFICADORES} printf("\nlinea %d, identificador: %s", linea, yytext); return yylex();
-{CONSTANTE_ENTERA_OCTAL} printf("\nlinea %d, constante entero octal: %s", linea, yytext); return yylex();
-{CONSTANTE_ENTERA_DECIMAL} printf("\nlinea %d, constante entera decimal: %s", linea, yytext); return yylex();
-{CONSTANTE_ENTERA_HEXADECIMAL} printf("\nlinea %d, constante entera hexadecimal: %s", linea, yytext); return yylex();
-{CONSTANTE_REAL_SIN_EXPONENTE} printf("\nlinea %d, constante real sin exponente: %s", linea, yytext); return yylex();
-{CONSTANTE_REAL_EXPONENTE} printf("\nlinea %d, constante real con exponente: %s", linea, yytext); return yylex();
-{CONSTANTE_CARACTER} printf("\nlinea %d, constante caracter: %s", linea, yytext); return yylex();
+{IDENTIFICADORES} printf("\nlinea %d, identificador: %s", linea, yytext); return (IDENTIFICADOR);
+{CONSTANTE_ENTERA_OCTAL} printf("\nlinea %d, constante entero octal: %s", linea, yytext); return (ENTERO);
+{CONSTANTE_ENTERA_DECIMAL} printf("\nlinea %d, constante entera decimal: %s", linea, yytext); return (ENTERO);
+{CONSTANTE_ENTERA_HEXADECIMAL} printf("\nlinea %d, constante entera hexadecimal: %s", linea, yytext); return (ENTERO);
+{CONSTANTE_REAL_SIN_EXPONENTE} printf("\nlinea %d, constante real sin exponente: %s", linea, yytext); return (REAL);
+{CONSTANTE_REAL_EXPONENTE} printf("\nlinea %d, constante real con exponente: %s", linea, yytext); return (REAL);
+{CONSTANTE_CARACTER} printf("\nlinea %d, constante caracter: %s", linea, yytext); return (CARACTER);
 {OPERADORES_ACCESO_MEMORIA} printf("\nlinea %d, operador: %s", linea, yytext); return yylex();
 {OPERADORES_BITS} printf("\nlinea %d, operador: %s", linea, yytext); return yylex();
 {OPERADORES_RELACIONALES} printf("\nlinea %d, operador: %s", linea, yytext); return yylex();
@@ -58,7 +58,7 @@ OPERADORES_ARITMETICOS ([*/%+-]|"--"|"++"|"*="|"/="|"%="|"+="|"-=")
 
 \"		BEGIN(CADENA);strcat(cadena, yytext);
 <CADENA>\\\n			i++;linea++;strcat(cadena, yytext);
-<CADENA>\"	BEGIN 0;strcat(cadena, yytext); printf("\nlinea %d, constante cadena: %s", linea-i, cadena);i=0;strcpy(cadena,""); return yylex();
+<CADENA>\"	BEGIN 0;strcat(cadena, yytext); printf("\nlinea %d, constante cadena: %s", linea-i, cadena);i=0;strcpy(cadena,""); return (CADENA);
 <CADENA>{CONSTANTE_CADENA}		strcat(cadena,yytext);
 
 . printf("\nlinea %d, ERROR: %s", linea, yytext); return yylex();
