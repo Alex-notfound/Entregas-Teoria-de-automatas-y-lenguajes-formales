@@ -8,11 +8,10 @@
 
 %}
 
-
 %x COMENTARIO
 %x CADENA
 
-RESERVADAS (auto|base|boolean|break|case|catch|class|char|continue|default|do|double|else|enum|extern|false|finally|float|for|goto|if|include|int|interface|long|namespace|new|override|private|protected|public|return|sealed|short|signed|sizeof|static|struct|switch|this|throw|true|typedef|union|unsigned|using|virtual|void|while)
+RESERVADAS (abstract|base|boolean|break|case|catch|class|char|continue|default|do|double|else|enum|extern|false|finally|float|for|goto|if|int|internal|interface|long|namespace|new|override|private|protected|public|return|sealed|short|signed|sizeof|static|struct|switch|this|throw|true|try|typedef|union|unsigned|using|virtual|void|while)
 IDENTIFICADORES ([A-Za-z_][A-Za-z_0-9]*)
 CARACTERES_ESCAPADOS (\\'|\\\"|\\?|\\\\|\\n|\\r|\\t|\\v)
 CONSTANTE_ENTERA_OCTAL (0[0-7]+)
@@ -78,4 +77,3 @@ int main(int argc, char *argv [])
   printf("\n\n");
   fclose(yyin);
 } 
-
