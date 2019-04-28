@@ -67,32 +67,121 @@ lista_nombres_tipo_o_espacio_nombres
 /*******************/
 /* ESPACIO NOMBRES */
 /*******************/
-
+declaracion_espacio_nombres ::= ’namespace’ identificador_anidado bloque_espacio_nombres
+identificador_anidado ::= [ IDENTIFICADOR ’.’ ]* IDENTIFICADOR
+bloque_espacio_nombres ::= ’{’ [ directiva_uso ]* [ declaracion ]+ ’}’
 
 /*************/
 /* VARIABLES */
 /*************/
-
+declaracion_variable ::= tipo ( nombre )+ ’;’
+tipo ::= ’<’ nombre_tipo_o_espacio_nombres ’>’
+| tipo_escalar
+tipo_escalar ::= [ signo ]? [ longitud ]? tipo_basico
+longitud ::= SHORT | LONG
+signo ::= SIGNED | UNSIGNED
+tipo_basico ::= CHAR | INT | FLOAT | DOUBLE | BOOLEAN
+nombre ::= dato [ ’=’ valor ]?
+dato ::= [ ’*’ ]* dato_indexado
+dato_indexado ::= IDENTIFICADOR [ ’[’ ( expresion )* ’]’ ]*
+valor ::= expresion
+| ’{’ ( valor )+ ’}’
 
 /*********/
 /* TIPOS */
 /*********/
+declaracion_tipo ::= nombramiento_tipo
+| declaracion_struct_union
+| declaracion_interfaz
+| declaracion_enum
+| declaracion_clase
+nombramiento_tipo ::= ’typedef’ tipo ID ’;’
+declaracion_struct_union ::= [ modificador ]* struct_union [ IDENTIFICADOR ]?
+’{’ [ declaracion_campo ]+ ’}’
+modificador ::= ’new’ | ’public’ | ’protected’ | ’internal’ | ’private’ | ’static’
+| ’virtual’ | ’sealed’ | ’override’ | ’abstract’ | ’extern’
+struct_union ::= ’struct’ | ’union’
+declaracion_campo ::= tipo ( nombre )+ ’;’
+| declaracion_struct_union ( nombre )+ ’;’
+declaracion_interfaz ::= [ modificador ]* ’interface’ IDENTIFICADOR herencia cuerpo_interfaz
+herencia ::= [ ’:’ ( nombre_tipo_o_espacio_nombres )+ ]?
+cuerpo_interfaz ::= ’{’ [ declaracion_metodo_interfaz ]* ’}’
+declaracion_metodo_interfaz ::= [ ’new’ ]? firma_funcion ’;’
+declaracion_enum ::= [ modificador ]* ’enum’ IDENTIFICADOR [ ’:’ tipo_escalar ]? cuerpo_enum
+cuerpo_enum ::= ’{’ ( declaracion_miembro_enum )+ ’}’
+declaracion_miembro_enum ::= IDENTIFICADOR [ ’=’ expresion ]?
 
 
 /**********/
 /* CLASES */
 /**********/
-
+declaracion_clase ::= [ modificador ]* ’class’ IDENTIFICADOR herencia cuerpo_clase
+cuerpo clase ::= ’{’ [ declaracion_elemento_clase ]+ ’}’
+declaracion_elemento_clase ::= declaracion_tipo
+| declaracion_atributo
+| declaracion_metodo
+| declaracion_constructor
+| declaracion_destructor
+| declaracion_atributo
+declaracion_atributo ::= [ modificador ]* declaracion_variable
+declaracion_metodo ::= [ modificador ]* firma_funcion bloque_instrucciones
+declaracion_constructor ::= [ modificador ]* cabecera_constructor bloque_instrucciones
+cabecera_constructor ::= IDENTIFICADOR [ parametros ]? [ inicializador_constructor ]?
+inicializador_constructor ::= ’:’ BASE parametros
+| ’:’ THIS parametros
+declaracion_destructor ::= [ modificador ]* cabecera_destructor bloque_instrucciones
+cabecera_destructor ::= ’~’ IDENTIFICADOR ’(’ ’)’
 
 /*************/
 /* FUNCIONES */
 /*************/
+declaracion_funcion ::= firma_funcion bloque_instrucciones
+firma_funcion ::= VOID IDENTIFICADOR parametros
+| tipo [ ’*’ ]* IDENTIFICADOR parametros
+parametros ::= ’(’ [ argumentos ’;’ ]* [ argumentos ]? ’)’
+argumentos ::= nombre_tipo ( variable )+
+nombre_tipo ::= tipo [ ’*’ ]*
+variable ::= IDENTIFICADOR [ ’=’ expresion ]?
 
 
 /*****************/
 /* INSTRUCCIONES */
 /*****************/
-
+instruccion ::= bloque_instrucciones
+| instruccion_expresion
+| instruccion_bifurcacion
+| instruccion_bucle
+| instruccion_salto
+| instruccion_destino_salto
+| instruccion_retorno
+| instruccion_lanzamiento_excepcion
+| instruccion_captura_excepcion
+| instruccion_vacia
+bloque_instrucciones ::= ’{’ [ declaracion ]* [ instruccion ]* ’}’
+instruccion_expresion ::= expresion_funcional ’;’ | asignacion ’;’
+asignacion ::= expresion_indexada operador_asignacion expresion
+operador_asignacion ::= ’=’ | ’*=’ | ’/=’ | ’%=’ | ’+=’ | ’-=’ | ’<<=’ | ’>>=’ | ’&=’ | ’^=’ | ’|=’
+instruccion_bifurcacion ::= ’if’ ’(’ expresion ’)’ instruccion [ ’else’ instruccion ]?
+| ’switch’ ’(’ expresion ’)’ ’{’ [ instruccion_caso ]+ ’}’
+instruccion_caso ::= ’case’ expresion ’:’ instruccion
+| ’default’ ’:’ instruccion
+instruccion_bucle ::= ’while’ ’(’ expresion ’)’ instruccion
+| ’do’ instruccion ’while’ ’( expresion ’)’ ’;’
+| ’for’ ’(’ ( asignacion )* ’;’ expresion ’;’ ( expresion )+ ’)’ instruccion
+instruccion_salto ::= ’goto’ IDENTIFICADOR ’;’ | ’continue’ ’;’ | ’break’ ’;’
+instruccion_destino_salto ::= IDENTIFICADOR ’:’ instruccion ’;’
+instruccion_retorno ::= ’return’ [ expresion ]? ’;’
+instruccion_lanzamiento_excepcion ::= ’throw’ expresion ’;’
+instruccion_captura_excepcion ::= ’try’ bloque_instrucciones clausulas-catch
+| ’try’ bloque_instrucciones clausula_finally
+| ’try’ bloque_instrucciones clausulas-catch clausula_finally
+clausulas-catch ::= [ clausula_catch_especifica ]+
+| clausula_catch_general
+| [ clausula_catch_especifica ]+ clausula_catch_general
+clausula_catch_especifica ::= ’catch’ ’(’ nombre_tipo ’)’ bloque_instrucciones
+clausula_catch_general ::= ’catch’ bloque_instrucciones
+clausula-finally ::= ’finally’ bloque_instrucciones
+instruccion_retorno ::= ’return’ [ expresion ]? ’;’
 
 /***************/
 /* EXPRESIONES */
