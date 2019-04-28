@@ -20,8 +20,8 @@
 /************/
 /* PROGRAMA */
 /************/
-modulo : mas_directiva_uso mas_declaracion | mas_declaracion {printf("\tlista_dir_uso -> dir_uso\n");} ;
-
+modulo : mas_directiva_uso mas_declaracion | mas_declaracion {printf("\tlista_dir_uso -> dir_uso\n");} 
+;
 mas_directiva_uso : directiva_uso | mas_directiva_uso directiva_uso 
 ;
 mas_declaracion : declaracion | mas_declaracion declaracion 
@@ -34,32 +34,50 @@ directiva_uso : USING IDENTIFICADOR '=' nombre_tipo_o_espacio_nombres ';' | USIN
 nombre_tipo_o_espacio_nombres : mas_identificador_con_tipos 
 {printf("\tnom_tipo_o_esp_noms -> id_tipos\n");} ;
 
-identificador_con_tipos : IDENTIFICADOR| IDENTIFICADOR '(' nombre_tipo_o_espacio_nombres ')'
+identificador_con_tipos : IDENTIFICADOR | IDENTIFICADOR '(' nombre_tipo_o_espacio_nombres ')'
 {printf("\tid_tipos -> ID\n");} ;
 
 /*******************/
 /* ESPACIO NOMBRES */
 /*******************/
 declaracion_espacio_nombres : 'namespace' identificador_anidado bloque_espacio_nombres
-identificador_anidado : [ IDENTIFICADOR '.' ]* IDENTIFICADOR
-bloque_espacio_nombres : '{' [ directiva_uso ]* [ declaracion ]+ '}'
-
+;
+identificador_anidado : IDENTIFICADOR | identificador_anidado '.' IDENTIFICADOR 
+;
+bloque_espacio_nombres : '{' mas_declaracion '}' | '{' mas_directiva_uso mas_declaracion '}'
+;
 
 /*************/
 /* VARIABLES */
 /*************/
-declaracion_variable : tipo ( nombre )+ ';'
-tipo : '<' nombre_tipo_o_espacio_nombres '>'
-| tipo_escalar
-tipo_escalar : [ signo ]? [ longitud ]? tipo_basico
-longitud : SHORT | LONG
-signo : SIGNED | UNSIGNED
-tipo_basico : CHAR | INT | FLOAT | DOUBLE | BOOLEAN
-nombre : dato [ '=' valor ]?
-dato : [ '*' ]* dato_indexado
-dato_indexado : IDENTIFICADOR [ '[' ( expresion )* ']' ]*
-valor : expresion
-| '{' ( valor )+ '}'
+declaracion_variable : tipo mas_nombre ';'
+;
+tipo : '<' nombre_tipo_o_espacio_nombres '>' | tipo_escalar
+;
+tipo_escalar : tipo_basico | longitud tipo_basico | signo tipo_basico | signo longitud tipo_basico
+;
+longitud : SHORT {printf("\t" $$ " -> " $1 "\n");}| LONG {printf("\t" $$ " -> " $2 "\n");}
+;
+signo : SIGNED {printf("\t" $$ " -> " $1 "\n");}| UNSIGNED {printf("\t" $$ " -> " $2 "\n");}
+;
+tipo_basico : CHAR {printf("\t" $$ " -> " $1 "\n");} | INT {printf("\t" $$ " -> " $2 "\n");} 
+            | FLOAT {printf("\t" $$ " -> " $3 "\n");}| DOUBLE {printf("\t" $$ " -> " $4 "\n");}
+            | BOOLEAN{printf("\t" $$ " -> " $5 "\n");}
+;
+nombre : dato | dato '=' valor
+;
+mas_nombre : nombre | mas_nombre nombre
+;
+//Posiblemente mal:
+dato : dato_indexado | '*' dato
+;
+dato_indexado : IDENTIFICADOR | IDENTIFICADOR '[' ']' | IDENTIFICADOR '[' mas_expresion ']' 
+;
+mas_expresion : expresion | mas_expresion ',' expresion
+;
+valor : expresion | '{' mas_valor '}'
+;
+mas_valor : valor | mas_valor ',' valor
 
 /*********/
 /* TIPOS */
