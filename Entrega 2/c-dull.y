@@ -84,61 +84,100 @@ mas_valor : valor | mas_valor ',' valor
 /*********/
 
 declaracion_tipo : nombramiento_tipo
-| declaracion_struct_union
-| declaracion_interfaz
-| declaracion_enum
-| declaracion_clase
-
+                  | declaracion_struct_union
+                  | declaracion_interfaz
+                  | declaracion_enum
+                  | declaracion_clase
+;
 nombramiento_tipo : 'typedef' tipo ID ';'
-declaracion_struct_union : [ modificador ]* struct_union [ IDENTIFICADOR ]?
-'{' [ declaracion_campo ]+ '}'
-
+;
+declaracion_struct_union : struct_union '{' mas_declaracion_campo '}'
+                          | mas_modificador struct_union '{' mas_declaracion_campo '}'
+                          | mas_modificador struct_union IDENTIFICADOR '{' mas_declaracion_campo '}'
+;
 modificador : 'new' | 'public' | 'protected' | 'internal' | 'private' | 'static'
 | 'virtual' | 'sealed' | 'override' | 'abstract' | 'extern'
-
+;
+mas_modificador: modificador | mas_modificador modificador
+;
 struct_union : 'struct' | 'union'
-declaracion_campo : tipo ( nombre )+ ';' | declaracion_struct_union ( nombre )+ ';'
-declaracion_interfaz : [ modificador ]* 'interface' IDENTIFICADOR herencia cuerpo_interfaz
-herencia : [ ':' ( nombre_tipo_o_espacio_nombres )+ ]?
-cuerpo_interfaz : '{' [ declaracion_metodo_interfaz ]* '}'
-declaracion_metodo_interfaz : [ 'new' ]? firma_funcion ';'
-declaracion_enum : [ modificador ]* 'enum' IDENTIFICADOR [ ':' tipo_escalar ]? cuerpo_enum
-cuerpo_enum : '{' ( declaracion_miembro_enum )+ '}'
-declaracion_miembro_enum : IDENTIFICADOR [ '=' expresion ]?
-
+;
+declaracion_campo : tipo mas_nombre ';' | declaracion_struct_union mas_nombre ';'
+;
+mas_nombre : nombre | mas_nombre ',' nombre
+;
+mas_declaracion_campo: declaracion_campo | mas_declaracion_campo declaracion_campo
+;
+declaracion_interfaz : 'interface' IDENTIFICADOR herencia cuerpo_interfaz
+                      | mas_modificador 'interface' IDENTIFICADOR herencia cuerpo_interfaz
+;
+herencia : ':' nombre_tipo_o_espacio_nombres
+;
+mas_nombre_tipo_o_espacio_nombres : nombre_tipo_o_espacio_nombres | mas_nombre_tipo_o_espacio_nombres ',' nombre_tipo_o_espacio_nombres
+;
+cuerpo_interfaz : '{' '}' | '{' mas_declaracion_metodo_interfaz '}'
+;
+declaracion_metodo_interfaz : firma_funcion ';' | 'new' firma_funcion ';'
+;
+mas_declaracion_metodo_interfaz : declaracion_metodo_interfaz | mas_declaracion_metodo_interfaz declaracion_metodo_interfaz
+;
+declaracion_enum : 'enum' IDENTIFICADOR cuerpo_enum
+                  | 'enum' IDENTIFICADOR ':' tipo_escalar cuerpo_enum
+                  | mas_modificador 'enum' IDENTIFICADOR cuerpo_enum
+                  | mas_modificador 'enum' IDENTIFICADOR ':' tipo_escalar cuerpo_enum
+;
+cuerpo_enum : '{' mas_declaracion_miembro_enum '}'
+;
+declaracion_miembro_enum : IDENTIFICADOR | IDENTIFICADOR '=' expresion
+;
+mas_declaracion_miembro_enum : declaracion_miembro_enum | mas_declaracion_miembro_enum ',' declaracion_miembro_enum
 
 /**********/
 /* CLASES */
 /**********/
 declaracion_clase : [ modificador ]* 'class' IDENTIFICADOR herencia cuerpo_clase
+;
 cuerpo clase : '{' [ declaracion_elemento_clase ]+ '}'
+;
 declaracion_elemento_clase : declaracion_tipo
 | declaracion_atributo
 | declaracion_metodo
 | declaracion_constructor
 | declaracion_destructor
 | declaracion_atributo
+;
 declaracion_atributo : [ modificador ]* declaracion_variable
+;
 declaracion_metodo : [ modificador ]* firma_funcion bloque_instrucciones
+;
 declaracion_constructor : [ modificador ]* cabecera_constructor bloque_instrucciones
-cabecera_constructor : IDENTIFICADOR [ parametros ]? [ inicializador_constructor ]?
-inicializador_constructor : ':' BASE parametros
-| ':' THIS parametros
+;
+cabecera_constructor : IDENTIFICADOR | IDENTIFICADOR parametros inicializador_constructor 
+                      | IDENTIFICADOR parametros | IDENTIFICADOR inicializador_constructor
+;
+inicializador_constructor : ':' BASE parametros | ':' THIS parametros
+;
 declaracion_destructor : [ modificador ]* cabecera_destructor bloque_instrucciones
+;
 cabecera_destructor : '~' IDENTIFICADOR '(' ')'
-
+;
 
 /*************/
 /* FUNCIONES */
 /*************/
 declaracion_funcion : firma_funcion bloque_instrucciones
+;
 firma_funcion : VOID IDENTIFICADOR parametros
 | tipo [ '*' ]* IDENTIFICADOR parametros
+;
 parametros : '(' [ argumentos ';' ]* [ argumentos ]? ')'
+;
 argumentos : nombre_tipo ( variable )+
+;
 nombre_tipo : tipo [ '*' ]*
-variable : IDENTIFICADOR [ '=' expresion ]?
-
+;
+variable : IDENTIFICADOR | IDENTIFICADOR '=' expresion
+;
 
 /*****************/
 /* INSTRUCCIONES */
@@ -153,56 +192,80 @@ instruccion : bloque_instrucciones
 | instruccion_lanzamiento_excepcion
 | instruccion_captura_excepcion
 | instruccion_vacia
+;
 bloque_instrucciones : '{' [ declaracion ]* [ instruccion ]* '}'
+;
 instruccion_expresion : expresion_funcional ';' | asignacion ';'
+;
 asignacion : expresion_indexada operador_asignacion expresion
+;
 operador_asignacion : '=' | '*=' | '/=' | '%=' | '+=' | '-=' | '<<=' | '>>=' | '&=' | '^=' | '|='
+;
 instruccion_bifurcacion : 'if' '(' expresion ')' instruccion [ 'else' instruccion ]?
 | 'switch' '(' expresion ')' '{' [ instruccion_caso ]+ '}'
+;
 instruccion_caso : 'case' expresion ':' instruccion
 | 'default' ':' instruccion
+;
 instruccion_bucle : 'while' '(' expresion ')' instruccion
 | 'do' instruccion 'while' '( expresion ')' ';'
 | 'for' '(' ( asignacion )* ';' expresion ';' ( expresion )+ ')' instruccion
+;
 instruccion_salto : 'goto' IDENTIFICADOR ';' | 'continue' ';' | 'break' ';'
+;
 instruccion_destino_salto : IDENTIFICADOR ':' instruccion ';'
+;
 instruccion_retorno : 'return' [ expresion ]? ';'
+;
 instruccion_lanzamiento_excepcion : 'throw' expresion ';'
+;
 instruccion_captura_excepcion : 'try' bloque_instrucciones clausulas-catch
-| 'try' bloque_instrucciones clausula_finally
-| 'try' bloque_instrucciones clausulas-catch clausula_finally
-clausulas-catch : [ clausula_catch_especifica ]+
-| clausula_catch_general
-| [ clausula_catch_especifica ]+ clausula_catch_general
+                              | 'try' bloque_instrucciones clausula_finally
+                              | 'try' bloque_instrucciones clausulas-catch clausula_finally
+;
+clausulas-catch : [ clausula_catch_especifica ]+ | clausula_catch_general | [ clausula_catch_especifica ]+ clausula_catch_general
+;
 clausula_catch_especifica : 'catch' '(' nombre_tipo ')' bloque_instrucciones
+;
 clausula_catch_general : 'catch' bloque_instrucciones
+;
 clausula-finally : 'finally' bloque_instrucciones
-instruccion_retorno : 'return' [ expresion ]? ';'
+;
+instruccion_retorno : 'return' ';' | 'return' expresion ';'
+;
 
 /***************/
 /* EXPRESIONES */
 /***************/
 expresion_constante : ENTERO | REAL | CADENA | CARACTER | BOOLEANO
+;
 expresion_parentesis : '(' expresion ')'
+;
 expresion_funcional : identificador_anidado '(' ( expresion )* ')'
+;
 expresion_creacion_objeto : 'new' identificador_anidado '(' ( expresion )* ')'
+;
 expresion_indexada : identificador_anidado
-| expresion_indexada '[' expresion ']'
-| expresion_indexada '->' identificador_anidado
+                    | expresion_indexada '[' expresion ']'
+                    | expresion_indexada '->' identificador_anidado
+;
 expresion_postfija : expresion_constante
-| expresion_parentesis
-| expresion_funcional
-| expresion_creacion_objeto
-| expresion_indexada
-| expresion_postfija '++'
-| expresion_postfija '--'
+                    | expresion_parentesis
+                    | expresion_funcional
+                    | expresion_creacion_objeto
+                    | expresion_indexada
+                    | expresion_postfija '++'
+                    | expresion_postfija '--'
+;
 expresion_prefija : expresion_postfija
-| 'sizeof' expresion_prefija
-| 'sizeof' '(' nombre_tipo ')'
-| operador_prefijo expresion_cast
+                  | 'sizeof' expresion_prefija
+                  | 'sizeof' '(' nombre_tipo ')'
+                  | operador_prefijo expresion_cast
+;
 operador_prefijo : '++' | '--' | '&' | '*' | '+' | '-' | '~' | '!'
-expresion_cast : expresion_prefija
-| '(' nombre_tipo ')' expresion_prefija
+;
+expresion_cast : expresion_prefija | '(' nombre_tipo ')' expresion_prefija
+;
 
 %%
 
