@@ -135,9 +135,9 @@ mas_declaracion_miembro_enum : declaracion_miembro_enum | mas_declaracion_miembr
 /**********/
 /* CLASES */
 /**********/
-declaracion_clase : [ modificador ]* 'class' IDENTIFICADOR herencia cuerpo_clase
+declaracion_clase : 'class' IDENTIFICADOR herencia cuerpo_clase | mas_modificador 'class' IDENTIFICADOR herencia cuerpo_clase
 ;
-cuerpo clase : '{' [ declaracion_elemento_clase ]+ '}'
+cuerpo clase : '{' mas_declaracion_elemento_clase '}'
 ;
 declaracion_elemento_clase : declaracion_tipo
 | declaracion_atributo
@@ -146,18 +146,20 @@ declaracion_elemento_clase : declaracion_tipo
 | declaracion_destructor
 | declaracion_atributo
 ;
-declaracion_atributo : [ modificador ]* declaracion_variable
+mas_declaracion_elemento_clase : declaracion_elemento_clase | mas_declaracion_elemento_clase declaracion_elemento_clase
 ;
-declaracion_metodo : [ modificador ]* firma_funcion bloque_instrucciones
+declaracion_atributo : declaracion_variable | mas_modificador declaracion_variable
 ;
-declaracion_constructor : [ modificador ]* cabecera_constructor bloque_instrucciones
+declaracion_metodo : firma_funcion bloque_instrucciones | mas_modificador firma_funcion bloque_instrucciones
+;
+declaracion_constructor : cabecera_constructor bloque_instrucciones | mas_modificador cabecera_constructor bloque_instrucciones
 ;
 cabecera_constructor : IDENTIFICADOR | IDENTIFICADOR parametros inicializador_constructor 
                       | IDENTIFICADOR parametros | IDENTIFICADOR inicializador_constructor
 ;
 inicializador_constructor : ':' BASE parametros | ':' THIS parametros
 ;
-declaracion_destructor : [ modificador ]* cabecera_destructor bloque_instrucciones
+declaracion_destructor : cabecera_destructor bloque_instrucciones | mas_modificador cabecera_destructor bloque_instrucciones
 ;
 cabecera_destructor : '~' IDENTIFICADOR '(' ')'
 ;
@@ -167,33 +169,40 @@ cabecera_destructor : '~' IDENTIFICADOR '(' ')'
 /*************/
 declaracion_funcion : firma_funcion bloque_instrucciones
 ;
-firma_funcion : VOID IDENTIFICADOR parametros
-| tipo [ '*' ]* IDENTIFICADOR parametros
+firma_funcion : VOID IDENTIFICADOR parametros | tipo IDENTIFICADOR parametros | tipo mas_asterisco IDENTIFICADOR parametros
 ;
-parametros : '(' [ argumentos ';' ]* [ argumentos ]? ')'
+mas_asterisco: '*' | mas_asterisco '*'
 ;
-argumentos : nombre_tipo ( variable )+
+parametros : '(' ')' | '(' mas_argumentos ')'
 ;
-nombre_tipo : tipo [ '*' ]*
+argumentos : nombre_tipo mas_variable
+;
+mas_argumentos : argumentos | mas_argumentos ';' argumentos
+;
+nombre_tipo : tipo | tipo mas_asterisco
 ;
 variable : IDENTIFICADOR | IDENTIFICADOR '=' expresion
+;
+mas_variable : variable | mas_variable ',' variable
 ;
 
 /*****************/
 /* INSTRUCCIONES */
 /*****************/
 instruccion : bloque_instrucciones
-| instruccion_expresion
-| instruccion_bifurcacion
-| instruccion_bucle
-| instruccion_salto
-| instruccion_destino_salto
-| instruccion_retorno
-| instruccion_lanzamiento_excepcion
-| instruccion_captura_excepcion
-| instruccion_vacia
+            | instruccion_expresion
+            | instruccion_bifurcacion
+            | instruccion_bucle
+            | instruccion_salto
+            | instruccion_destino_salto
+            | instruccion_retorno
+            | instruccion_lanzamiento_excepcion
+            | instruccion_captura_excepcion
+            | instruccion_vacia
 ;
-bloque_instrucciones : '{' [ declaracion ]* [ instruccion ]* '}'
+mas_instruccion : instruccion | mas_instruccion instruccion
+;
+bloque_instrucciones : '{' '}' | '{' mas_declaracion '}' | '{' mas_instruccion '}' | '{' mas_declaracion mas_instruccion '}'
 ;
 instruccion_expresion : expresion_funcional ';' | asignacion ';'
 ;
@@ -201,21 +210,24 @@ asignacion : expresion_indexada operador_asignacion expresion
 ;
 operador_asignacion : '=' | '*=' | '/=' | '%=' | '+=' | '-=' | '<<=' | '>>=' | '&=' | '^=' | '|='
 ;
-instruccion_bifurcacion : 'if' '(' expresion ')' instruccion [ 'else' instruccion ]?
-| 'switch' '(' expresion ')' '{' [ instruccion_caso ]+ '}'
+instruccion_bifurcacion : 'if' '(' expresion ')' instruccion | 'if' '(' expresion ')' instruccion 'else' instruccion 
+                        | 'switch' '(' expresion ')' '{' mas_instruccion_caso '}'
 ;
-instruccion_caso : 'case' expresion ':' instruccion
-| 'default' ':' instruccion
+instruccion_caso : 'case' expresion ':' instruccion | 'default' ':' instruccion
 ;
-instruccion_bucle : 'while' '(' expresion ')' instruccion
-| 'do' instruccion 'while' '( expresion ')' ';'
-| 'for' '(' ( asignacion )* ';' expresion ';' ( expresion )+ ')' instruccion
+mas_instruccion_caso: instruccion_caso | mas_instruccion_caso instruccion_caso
+;
+instruccion_bucle : 'while' '(' expresion ')' instruccion | 'do' instruccion 'while' '(' expresion ')' ';'
+                  | 'for' '(' ';' expresion ';' mas_expresion ')' instruccion
+                  | 'for' '(' mas_asignacion ';' expresion ';' mas_expresion ')' instruccion
+;
+mas_asignacion : asignacion | mas_asignacion asignacion
 ;
 instruccion_salto : 'goto' IDENTIFICADOR ';' | 'continue' ';' | 'break' ';'
 ;
 instruccion_destino_salto : IDENTIFICADOR ':' instruccion ';'
 ;
-instruccion_retorno : 'return' [ expresion ]? ';'
+instruccion_retorno : 'return' ';' |'return' expresion ';'
 ;
 instruccion_lanzamiento_excepcion : 'throw' expresion ';'
 ;
@@ -223,9 +235,11 @@ instruccion_captura_excepcion : 'try' bloque_instrucciones clausulas-catch
                               | 'try' bloque_instrucciones clausula_finally
                               | 'try' bloque_instrucciones clausulas-catch clausula_finally
 ;
-clausulas-catch : [ clausula_catch_especifica ]+ | clausula_catch_general | [ clausula_catch_especifica ]+ clausula_catch_general
+clausulas-catch : mas_clausula_catch_especifica | clausula_catch_general | mas_clausula_catch_especifica clausula_catch_general
 ;
 clausula_catch_especifica : 'catch' '(' nombre_tipo ')' bloque_instrucciones
+;
+mas_clausula_catch_especifica : mas_clausula_catch_especifica clausula_catch_especifica
 ;
 clausula_catch_general : 'catch' bloque_instrucciones
 ;
@@ -241,9 +255,9 @@ expresion_constante : ENTERO | REAL | CADENA | CARACTER | BOOLEANO
 ;
 expresion_parentesis : '(' expresion ')'
 ;
-expresion_funcional : identificador_anidado '(' ( expresion )* ')'
+expresion_funcional : identificador_anidado '(' ')' | identificador_anidado '(' mas_expresion ')'
 ;
-expresion_creacion_objeto : 'new' identificador_anidado '(' ( expresion )* ')'
+expresion_creacion_objeto : 'new' identificador_anidado '(' ')' | 'new' identificador_anidado '(' mas_expresion ')'
 ;
 expresion_indexada : identificador_anidado
                     | expresion_indexada '[' expresion ']'
