@@ -157,60 +157,60 @@ lista_valor
 /*********/
 
 declaracion_tipo 
-    : nombramiento_tipo
-    | declaracion_struct_union
-    | declaracion_interfaz
-    | declaracion_enum
-    | declaracion_clase
+    : nombramiento_tipo                                                       { printf ("  decl_tipo -> nombramiento_tipo\n"); }
+    | declaracion_struct_union                                                { printf ("  decl_tipo -> decl_struct_union\n"); }
+    | declaracion_interfaz                                                    { printf ("  decl_tipo -> decl_interfaz\n"); }
+    | declaracion_enum                                                        { printf ("  decl_tipo -> decl_enum\n"); }
+    | declaracion_clase                                                       { printf ("  decl_tipo -> decl_clase\n"); }
     ;
 
 nombramiento_tipo 
-    : TYPEDEF tipo ID ';'
+    : TYPEDEF tipo ID ';'                                                     { printf ("  nombramiento_tipo -> TYPEDEF tipo ID\n"); }
     ;
 
 declaracion_struct_union 
-    : struct_union '{' lista_declaracion_campo '}'
-    | lista_modificador struct_union '{' lista_declaracion_campo '}'
-    | lista_modificador struct_union IDENTIFICADOR '{' lista_declaracion_campo '}'
+    : struct_union '{' lista_declaracion_campo '}'                            { printf ("  decl_struct_union -> struct_union { list_decl_campo }\n"); }
+    | lista_modificador struct_union '{' lista_declaracion_campo '}'          { printf ("  decl_struct_union -> list_mod struct_union { list_decl_campo }\n"); }
+    | lista_modificador struct_union IDENTIFICADOR '{' lista_declaracion_campo '}' { printf ("  decl_struct_union -> list_mod struct_union ID { list_decl_campo }\n"); }
     ;
 
 modificador 
-    : NEW 
-    | PUBLIC 
-    | PROTECTED 
-    | INTERNAL 
-    | PRIVATE 
-    | STATIC
-    | VIRTUAL 
-    | SEALED 
-    | OVERRIDE 
-    | ABSTRACT 
-    | EXTERN
+    : NEW                                                                     { printf ("  mod -> NEW\n"); }
+    | PUBLIC                                                                  { printf ("  mod -> PUBLIC\n"); }
+    | PROTECTED                                                               { printf ("  mod -> PROTECTED\n"); }
+    | INTERNAL                                                                { printf ("  mod -> INTERNAL\n"); }
+    | PRIVATE                                                                 { printf ("  mod -> PRIVATE\n"); }
+    | STATIC                                                                  { printf ("  mod -> STATIC\n"); }
+    | VIRTUAL                                                                 { printf ("  mod -> VIRTUAL\n"); }
+    | SEALED                                                                  { printf ("  mod -> SEALED\n"); }
+    | OVERRIDE                                                                { printf ("  mod -> OVERRIDE\n"); }
+    | ABSTRACT                                                                { printf ("  mod -> ABSTRACT\n"); }
+    | EXTERN                                                                  { printf ("  mod -> EXTERN\n"); }
     ;
 
 lista_modificador
-    : modificador 
-    | lista_modificador modificador
+    : modificador                                                             { printf ("  list_mod -> mod\n"); }
+    | lista_modificador modificador                                           { printf ("  list_mod -> list_mod mod\n"); }
     ;
 
 struct_union 
-    : STRUCT 
-    | UNION
+    : STRUCT                                                                  { printf ("  struct_union -> STRUCT\n"); }
+    | UNION                                                                   { printf ("  struct_union -> UNION\n"); }
     ;
 
 declaracion_campo 
-    : tipo lista_nombre ';' 
-    | declaracion_struct_union lista_nombre ';'
+    : tipo lista_nombre ';'                                                   { printf ("  decl_campo -> tipo list_nom\n"); }
+    | declaracion_struct_union lista_nombre ';'                               { printf ("  decl_campo -> decl_struct_union list_nom\n"); }
     ;
 
 lista_nombre 
-    : nombre 
-    | lista_nombre ',' nombre
+    : nombre                                                                  { printf ("  list_nom -> nom\n"); }
+    | lista_nombre ',' nombre                                                 { printf ("  list_nom -> list_nom nom\n"); }
     ;
 
 lista_declaracion_campo
-    : declaracion_campo 
-    | lista_declaracion_campo declaracion_campo
+    : declaracion_campo                                                       { printf ("  list_decl_campo -> decl_campo\n"); }
+    | lista_declaracion_campo declaracion_campo                               { printf ("  list_decl_campo -> list_decl_campo decl_campo\n"); }
     ;
 
 declaracion_interfaz 
