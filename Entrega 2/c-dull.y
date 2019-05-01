@@ -2,14 +2,14 @@
   #include <stdlib.h>
   #include <stdio.h>
   extern FILE *yyin;
-  //extern int linea;
-  //extern char yytext;
+  extern int yylex();
+
   #define YYDEBUG 1
 
 %}
 
 %token ABSTRACT BASE BOOLEAN BREAK CASE CATCH CHAR CLASS CONTINUE DEFAULT DO DOUBLE ELSE ENUM EXTERN FINALLY FLOAT FOR GOTO IF INT INTERFACE INTERNAL LONG NAMESPACE NEW OVERRIDE PRIVATE PROTECTED PUBLIC RETURN SEALED SHORT SIGNED STATIC STRUCT SWITCH THIS THROW TRY TYPEDEF UNION UNSIGNED USING VIRTUAL VOID WHILE IDENTIFICADOR ENTERO CADENA REAL CARACTER BOOLEANO SIZEOF PTR_ACCESO INC DEC DESPI DESPD LE GE EQ NEQ AND OR MULT_ASIG DIV_ASIG MOD_ASIG SUMA_ASIG RESTA_ASIG DESPI_ASIG DESPD_ASIG AND_ASIG XOR_ASIG OR_ASIG
-
+%token USING
 %%
 
 /************/
@@ -17,571 +17,572 @@
 /************/
 
 modulo
-    : lista_declaracion                                                       { printf ("\tmodulo -> list_decl\n"); }
-    | lista_directivas_uso lista_declaracion                                  { printf ("\tmodulo -> lista_dir_uso list_decl\n"); }
+    : lista_declaracion                                                       { printf ("\n\tmodulo -> list_decl"); }
+    | lista_directivas_uso lista_declaracion                                  { printf ("\n\tmodulo -> lista_dir_uso list_decl"); }
     ;
 
 lista_declaracion
-    : declaracion                                                             { printf ("\tlist_decl -> decl\n"); }
-    | lista_declaracion declaracion                                           { printf ("\tlist_decl -> list_decl decl\n"); }
+    : declaracion                                                             { printf ("\n\tlist_decl -> decl"); }
+    | lista_declaracion declaracion                                           { printf ("\n\tlist_decl -> list_decl decl"); }
     ;
 
 declaracion
-    : declaracion_espacio_nombres                                             { printf ("\tdecl -> decl_esp_nom\n"); }
-    | declaracion_variable                                                    { printf ("\tdecl -> decl_var\n"); }
-    | declaracion_tipo                                                        { printf ("\tdecl -> decl_tipo\n"); }
-    | declaracion_funcion                                                     { printf ("\tdecl -> decl_func\n"); }
+    : declaracion_espacio_nombres                                             { printf ("\n\tdecl -> decl_esp_nom"); }
+    | declaracion_variable                                                    { printf ("\n\tdecl -> decl_var"); }
+    | declaracion_tipo                                                        { printf ("\n\tdecl -> decl_tipo"); }
+    | declaracion_funcion                                                     { printf ("\n\tdecl -> decl_func"); }
     ;
 
 lista_directivas_uso
-    : directiva_uso                                                           { printf ("\tlista_dir_uso -> dir_uso\n"); }
-    | lista_directivas_uso directiva_uso                                      { printf ("\tlista_dir_uso -> lista_dir_uso dir_uso\n"); }
+    : directiva_uso                                                           { printf ("\n\tlista_dir_uso -> dir_uso"); }
+    | lista_directivas_uso directiva_uso                                      { printf ("\n\tlista_dir_uso -> lista_dir_uso dir_uso"); }
     ;
 
 directiva_uso
-    : USING IDENTIFICADOR '=' nombre_tipo_o_espacio_nombres ';'               { printf ("\tdir_uso -> USING ID = nom_tipo_o_esp_noms\n"); }
-    | USING nombre_tipo_o_espacio_nombres ';'                                 { printf ("\tdir_uso -> nom_tipo_o_esp_noms\n"); }
+    : USING IDENTIFICADOR '=' nombre_tipo_o_espacio_nombres ';'               { printf ("\n\tdir_uso -> USING ID = nom_tipo_o_esp_noms"); }
+    | USING nombre_tipo_o_espacio_nombres ';'                                 { printf ("\n\tdir_uso -> nom_tipo_o_esp_noms"); }
     ;
 
 nombre_tipo_o_espacio_nombres
-    : identificador_con_tipos                                                 { printf ("\tnom_tipo_o_esp_noms -> id_tipos\n"); }
-    | nombre_tipo_o_espacio_nombres '.' identificador_con_tipos               { printf ("\tnom_tipo_o_esp_noms -> nom_tipo_o_esp_noms . id_tipos\n"); }
+    : identificador_con_tipos                                                 { printf ("\n\tnom_tipo_o_esp_noms -> id_tipos"); }
+    | nombre_tipo_o_espacio_nombres '.' identificador_con_tipos               { printf ("\n\tnom_tipo_o_esp_noms -> nom_tipo_o_esp_noms . id_tipos"); }
     ;
 
 identificador_con_tipos
-    : IDENTIFICADOR                                                           { printf ("\tid_tipos -> ID\n"); }
-    | IDENTIFICADOR '(' lista_nombres_tipo_o_espacio_nombres ')'              { printf ("\tid_tipos -> ID ( list_tipos )\n"); }
+    : IDENTIFICADOR                                                           { printf ("\n\tid_tipos -> ID"); }
+    | IDENTIFICADOR '(' lista_nombres_tipo_o_espacio_nombres ')'              { printf ("\n\tid_tipos -> ID ( list_tipos )"); }
     ;
 
 lista_nombres_tipo_o_espacio_nombres
-    : nombre_tipo_o_espacio_nombres                                           { printf ("\tlist_nom_tipo_o_esp_noms -> nom_tipo_o_esp_noms\n"); }
-    | lista_nombres_tipo_o_espacio_nombres ',' nombre_tipo_o_espacio_nombres  { printf ("\tlist_nom_tipo_o_esp_noms -> list_nom_tipo_o_esp_noms nom_tipo_o_esp_noms\n"); }
+    : nombre_tipo_o_espacio_nombres                                           { printf ("\n\tlist_nom_tipo_o_esp_noms -> nom_tipo_o_esp_noms"); }
+    | lista_nombres_tipo_o_espacio_nombres ',' nombre_tipo_o_espacio_nombres  { printf ("\n\tlist_nom_tipo_o_esp_noms -> list_nom_tipo_o_esp_noms nom_tipo_o_esp_noms"); }
     ;
 
 /*******************/
 /* ESPACIO NOMBRES */
 /*******************/
 declaracion_espacio_nombres 
-    : NAMESPACE identificador_anidado bloque_espacio_nombres                  { printf ("\tdecl_esp_nom -> NMSPACE id_anid bloq_esp_nom\n"); }
+    : NAMESPACE identificador_anidado bloque_espacio_nombres                  { printf ("\n\tdecl_esp_nom -> NMSPACE id_anid bloq_esp_nom"); }
     ;
 
 identificador_anidado 
-    : IDENTIFICADOR                                                           { printf ("\tid_anid -> ID\n"); }
-    | identificador_anidado '.' IDENTIFICADOR                                 { printf ("\tid_anid -> id_anid . ID\n"); }
+    : IDENTIFICADOR                                                           { printf ("\n\tid_anid -> ID"); }
+    | identificador_anidado '.' IDENTIFICADOR                                 { printf ("\n\tid_anid -> id_anid . ID"); }
     ;
 
 bloque_espacio_nombres 
-    : '{' lista_declaracion '}'                                               { printf ("\tbloq_esp_noms -> { list_decl }\n"); } 
-    | '{' lista_directivas_uso lista_declaracion '}'                          { printf ("\tbloq_esp_noms -> { lista_dir_uso list_decl }\n"); }
+    : '{' lista_declaracion '}'                                               { printf ("\n\tbloq_esp_noms -> { list_decl }"); } 
+    | '{' lista_directivas_uso lista_declaracion '}'                          { printf ("\n\tbloq_esp_noms -> { lista_dir_uso list_decl }"); }
     ;
 
 /*************/
 /* VARIABLES */
 /*************/
 declaracion_variable 
-    : tipo lista_nombre ';'                                                   { printf ("\tdecl_var -> tipo list_nom\n"); }
+    : tipo lista_nombre ';'                                                   { printf ("\n\tdecl_var -> tipo list_nom"); }
     ;
 
 tipo 
-    : '<' nombre_tipo_o_espacio_nombres '>'                                   { printf ("\ttipo -> < nom_tipo_o_esp_noms >\n"); }
-    | tipo_escalar                                                            { printf ("\ttipo -> tipo_escalar\n"); }
+    : '<' nombre_tipo_o_espacio_nombres '>'                                   { printf ("\n\ttipo -> < nom_tipo_o_esp_noms >"); }
+    | tipo_escalar                                                            { printf ("\n\ttipo -> tipo_escalar"); }
     ;
 
 tipo_escalar 
-    : tipo_basico                                                             { printf ("\ttipo_escalar -> tipo_basico\n"); }
-    | longitud tipo_basico                                                    { printf ("\ttipo_escalar -> long tipo_basico\n"); }
-    | signo tipo_basico                                                       { printf ("\ttipo_escalar -> signo tipo_basico\n"); }
-    | signo longitud tipo_basico                                              { printf ("\ttipo_escalar -> signo long tipo_basico\n"); }
+    : tipo_basico                                                             { printf ("\n\ttipo_escalar -> tipo_basico"); }
+    | longitud tipo_basico                                                    { printf ("\n\ttipo_escalar -> long tipo_basico"); }
+    | signo tipo_basico                                                       { printf ("\n\ttipo_escalar -> signo tipo_basico"); }
+    | signo longitud tipo_basico                                              { printf ("\n\ttipo_escalar -> signo long tipo_basico"); }
     ;
 
 longitud 
-    : SHORT                                                                   { printf ("\tlong -> SHORT\n"); }
-    | LONG                                                                    { printf ("\tlong -> LONG\n"); }
+    : SHORT                                                                   { printf ("\n\tlong -> SHORT"); }
+    | LONG                                                                    { printf ("\n\tlong -> LONG"); }
     ;
 
 signo 
-    : SIGNED                                                                  { printf ("\tsigno -> SIGNED\n"); }
-    | UNSIGNED                                                                { printf ("\tsigno -> UNSIGNED\n"); }
+    : SIGNED                                                                  { printf ("\n\tsigno -> SIGNED"); }
+    | UNSIGNED                                                                { printf ("\n\tsigno -> UNSIGNED"); }
     ;
 
 tipo_basico 
-    : CHAR                                                                    { printf ("\ttipo_basico -> CHARD\n"); }
-    | INT                                                                     { printf ("\ttipo_basico -> INT\n"); }
-    | FLOAT                                                                   { printf ("\ttipo_basico -> FLOAT\n"); }
-    | DOUBLE                                                                  { printf ("\ttipo_basico -> DOUBLE\n"); }
-    | BOOLEAN                                                                 { printf ("\ttipo_basico -> BOOLEAN\n"); }
+    : CHAR                                                                    { printf ("\n\ttipo_basico -> CHARD"); }
+    | INT                                                                     { printf ("\n\ttipo_basico -> INT"); }
+    | FLOAT                                                                   { printf ("\n\ttipo_basico -> FLOAT"); }
+    | DOUBLE                                                                  { printf ("\n\ttipo_basico -> DOUBLE"); }
+    | BOOLEAN                                                                 { printf ("\n\ttipo_basico -> BOOLEAN"); }
     ;
 
 nombre 
-    : dato                                                                    { printf ("\tnom -> dato\n"); }
-    | dato '=' valor                                                          { printf ("\tnom -> dato = valor\n"); }
+    : dato                                                                    { printf ("\n\tnom -> dato"); }
+    | dato '=' valor                                                          { printf ("\n\tnom -> dato = valor"); }
     ;
 
 lista_nombre 
-    : nombre                                                                  { printf ("\tlist_nom -> nom\n"); }
-    | lista_nombre nombre                                                     { printf ("\tlist_nom -> list_nom nom\n"); }
+    : nombre                                                                  { printf ("\n\tlist_nom -> nom"); }
+    | lista_nombre nombre                                                     { printf ("\n\tlist_nom -> list_nom nom"); }
     ;
 
 dato 
-    : dato_indexado                                                           { printf ("\tdato -> dato_indexado\n"); }
-    | '*' dato                                                                { printf ("\tdato -> * dato\n"); }
+    : dato_indexado                                                           { printf ("\n\tdato -> dato_indexado"); }
+    | '*' dato                                                                { printf ("\n\tdato -> * dato"); }
     ;
 
 dato_indexado 
-    : IDENTIFICADOR                                                           { printf ("\tdato_indexado -> ID\n"); }
-    | IDENTIFICADOR '[' ']'                                                   { printf ("\tdato_indexado -> ID []\n"); }
-    | IDENTIFICADOR '[' lista_expresion ']'                                   { printf ("\tdato_indexado -> ID [ list_exp ]\n"); }
+    : IDENTIFICADOR                                                           { printf ("\n\tdato_indexado -> ID"); }
+    | IDENTIFICADOR '[' ']'                                                   { printf ("\n\tdato_indexado -> ID []"); }
+    | IDENTIFICADOR '[' lista_expresion ']'                                   { printf ("\n\tdato_indexado -> ID [ list_exp ]"); }
     ;
 
 lista_expresion 
-    : expresion                                                               { printf ("\tlist_exp -> exp\n"); }
-    | lista_expresion ',' expresion                                           { printf ("\tlist_exp -> list_exp exp\n"); }
+    : expresion                                                               { printf ("\n\tlist_exp -> exp"); }
+    | lista_expresion ',' expresion                                           { printf ("\n\tlist_exp -> list_exp exp"); }
     ;
 
 valor 
-    : expresion                                                               { printf ("\tvalor -> exp\n"); }
-    | '{' lista_valor '}'                                                     { printf ("\tvalor -> { list_valor }\n"); }
+    : expresion                                                               { printf ("\n\tvalor -> exp"); }
+    | '{' lista_valor '}'                                                     { printf ("\n\tvalor -> { list_valor }"); }
     ;
 
 lista_valor 
-    : valor                                                                   { printf ("\tlist_valor -> valor\n"); }
-    | lista_valor ',' valor                                                   { printf ("\tlist_valor -> list_valor valor\n"); }
+    : valor                                                                   { printf ("\n\tlist_valor -> valor"); }
+    | lista_valor ',' valor                                                   { printf ("\n\tlist_valor -> list_valor valor"); }
 
 /*********/
 /* TIPOS */
 /*********/
 
 declaracion_tipo 
-    : nombramiento_tipo                                                       { printf ("\tdecl_tipo -> nombramiento_tipo\n"); }
-    | declaracion_struct_union                                                { printf ("\tdecl_tipo -> decl_struct_union\n"); }
-    | declaracion_interfaz                                                    { printf ("\tdecl_tipo -> decl_interfaz\n"); }
-    | declaracion_enum                                                        { printf ("\tdecl_tipo -> decl_enum\n"); }
-    | declaracion_clase                                                       { printf ("\tdecl_tipo -> decl_clase\n"); }
+    : nombramiento_tipo                                                       { printf ("\n\tdecl_tipo -> nombramiento_tipo"); }
+    | declaracion_struct_union                                                { printf ("\n\tdecl_tipo -> decl_struct_union"); }
+    | declaracion_interfaz                                                    { printf ("\n\tdecl_tipo -> decl_interfaz"); }
+    | declaracion_enum                                                        { printf ("\n\tdecl_tipo -> decl_enum"); }
+    | declaracion_clase                                                       { printf ("\n\tdecl_tipo -> decl_clase"); }
     ;
 
 nombramiento_tipo 
-    : TYPEDEF tipo IDENTIFICADOR ';'                                          { printf ("\tnombramiento_tipo -> TYPEDEF tipo ID\n"); }
+    : TYPEDEF tipo IDENTIFICADOR ';'                                          { printf ("\n\tnombramiento_tipo -> TYPEDEF tipo ID"); }
     ;
 
 declaracion_struct_union 
-    : struct_union '{' lista_declaracion_campo '}'                            { printf ("\tdecl_struct_union -> struct_union { list_decl_campo }\n"); }
-    | lista_modificador struct_union '{' lista_declaracion_campo '}'          { printf ("\tdecl_struct_union -> list_mod struct_union { list_decl_campo }\n"); }
-    | lista_modificador struct_union IDENTIFICADOR '{' lista_declaracion_campo '}' { printf ("  decl_struct_union -> list_mod struct_union ID { list_decl_campo }\n"); }
+    : struct_union '{' lista_declaracion_campo '}'                            { printf ("\n\tdecl_struct_union -> struct_union { list_decl_campo }"); }
+    | lista_modificador struct_union '{' lista_declaracion_campo '}'          { printf ("\n\tdecl_struct_union -> list_mod struct_union { list_decl_campo }"); }
+    | lista_modificador struct_union IDENTIFICADOR '{' lista_declaracion_campo '}' { printf ("  decl_struct_union -> list_mod struct_union ID { list_decl_campo }"); }
     ;
 
 modificador 
-    : NEW                                                                     { printf ("\tmod -> NEW\n"); }
-    | PUBLIC                                                                  { printf ("\tmod -> PUBLIC\n"); }
-    | PROTECTED                                                               { printf ("\tmod -> PROTECTED\n"); }
-    | INTERNAL                                                                { printf ("\tmod -> INTERNAL\n"); }
-    | PRIVATE                                                                 { printf ("\tmod -> PRIVATE\n"); }
-    | STATIC                                                                  { printf ("\tmod -> STATIC\n"); }
-    | VIRTUAL                                                                 { printf ("\tmod -> VIRTUAL\n"); }
-    | SEALED                                                                  { printf ("\tmod -> SEALED\n"); }
-    | OVERRIDE                                                                { printf ("\tmod -> OVERRIDE\n"); }
-    | ABSTRACT                                                                { printf ("\tmod -> ABSTRACT\n"); }
-    | EXTERN                                                                  { printf ("\tmod -> EXTERN\n"); }
+    : NEW                                                                     { printf ("\n\tmod -> NEW"); }
+    | PUBLIC                                                                  { printf ("\n\tmod -> PUBLIC"); }
+    | PROTECTED                                                               { printf ("\n\tmod -> PROTECTED"); }
+    | INTERNAL                                                                { printf ("\n\tmod -> INTERNAL"); }
+    | PRIVATE                                                                 { printf ("\n\tmod -> PRIVATE"); }
+    | STATIC                                                                  { printf ("\n\tmod -> STATIC"); }
+    | VIRTUAL                                                                 { printf ("\n\tmod -> VIRTUAL"); }
+    | SEALED                                                                  { printf ("\n\tmod -> SEALED"); }
+    | OVERRIDE                                                                { printf ("\n\tmod -> OVERRIDE"); }
+    | ABSTRACT                                                                { printf ("\n\tmod -> ABSTRACT"); }
+    | EXTERN                                                                  { printf ("\n\tmod -> EXTERN"); }
     ;
 
 lista_modificador
-    : modificador                                                             { printf ("\tlist_mod -> mod\n"); }
-    | lista_modificador modificador                                           { printf ("\tlist_mod -> list_mod mod\n"); }
+    : modificador                                                             { printf ("\n\tlist_mod -> mod"); }
+    | lista_modificador modificador                                           { printf ("\n\tlist_mod -> list_mod mod"); }
     ;
 
 struct_union 
-    : STRUCT                                                                  { printf ("\tstruct_union -> STRUCT\n"); }
-    | UNION                                                                   { printf ("\tstruct_union -> UNION\n"); }
+    : STRUCT                                                                  { printf ("\n\tstruct_union -> STRUCT"); }
+    | UNION                                                                   { printf ("\n\tstruct_union -> UNION"); }
     ;
 
 declaracion_campo 
-    : tipo lista_nombre ';'                                                   { printf ("\tdecl_campo -> tipo list_nom\n"); }
-    | declaracion_struct_union lista_nombre ';'                               { printf ("\tdecl_campo -> decl_struct_union list_nom\n"); }
+    : tipo lista_nombre ';'                                                   { printf ("\n\tdecl_campo -> tipo list_nom"); }
+    | declaracion_struct_union lista_nombre ';'                               { printf ("\n\tdecl_campo -> decl_struct_union list_nom"); }
     ;
 
 lista_nombre 
-    : nombre                                                                  { printf ("\tlist_nom -> nom\n"); }
-    | lista_nombre ',' nombre                                                 { printf ("\tlist_nom -> list_nom nom\n"); }
+    : nombre                                                                  { printf ("\n\tlist_nom -> nom"); }
+    | lista_nombre ',' nombre                                                 { printf ("\n\tlist_nom -> list_nom nom"); }
     ;
 
 lista_declaracion_campo
-    : declaracion_campo                                                       { printf ("\tlist_decl_campo -> decl_campo\n"); }
-    | lista_declaracion_campo declaracion_campo                               { printf ("\tlist_decl_campo -> list_decl_campo decl_campo\n"); }
+    : declaracion_campo                                                       { printf ("\n\tlist_decl_campo -> decl_campo"); }
+    | lista_declaracion_campo declaracion_campo                               { printf ("\n\tlist_decl_campo -> list_decl_campo decl_campo"); }
     ;
 
 declaracion_interfaz 
-    : INTERFACE IDENTIFICADOR herencia cuerpo_interfaz                        { printf ("\tdecl_interfaz -> INTERFACE ID herencia cuerpo_interfaz\n"); }
-    | lista_modificador INTERFACE IDENTIFICADOR herencia cuerpo_interfaz      { printf ("\tdecl_interfaz -> list_mod INTERFACE ID herencia cuerpo_interfaz\n"); }
+    : INTERFACE IDENTIFICADOR herencia cuerpo_interfaz                        { printf ("\n\tdecl_interfaz -> INTERFACE ID herencia cuerpo_interfaz"); }
+    | lista_modificador INTERFACE IDENTIFICADOR herencia cuerpo_interfaz      { printf ("\n\tdecl_interfaz -> list_mod INTERFACE ID herencia cuerpo_interfaz"); }
     ;
 
 herencia 
-    : ':' nombre_tipo_o_espacio_nombres                                       { printf ("\therencia -> nom_tipo_o_esp_noms\n"); }
+    : ':' nombre_tipo_o_espacio_nombres                                       { printf ("\n\therencia -> nom_tipo_o_esp_noms"); }
     ;
 
 lista_nombre_tipo_o_espacio_nombres 
-    : nombre_tipo_o_espacio_nombres                                           { printf ("\tlist_nom_tipo_o_esp_noms -> nom_tipo_o_esp_noms\n"); }
-    | lista_nombre_tipo_o_espacio_nombres ',' nombre_tipo_o_espacio_nombres   { printf ("\tlist_nom_tipo_o_esp_noms -> list_nom_tipo_o_esp_noms nom_tipo_o_esp_noms\n"); }
+    : nombre_tipo_o_espacio_nombres                                           { printf ("\n\tlist_nom_tipo_o_esp_noms -> nom_tipo_o_esp_noms"); }
+    | lista_nombre_tipo_o_espacio_nombres ',' nombre_tipo_o_espacio_nombres   { printf ("\n\tlist_nom_tipo_o_esp_noms -> list_nom_tipo_o_esp_noms nom_tipo_o_esp_noms"); }
     ;
 
 cuerpo_interfaz 
-    : '{' '}'                                                                 { printf ("\tcuerpo_interfaz -> { }\n"); }
-    | '{' lista_declaracion_metodo_interfaz '}'                               { printf ("\tcuerpo_interfaz -> { list_decl_metodo_inferfaz }\n"); }
+    : '{' '}'                                                                 { printf ("\n\tcuerpo_interfaz -> { }"); }
+    | '{' lista_declaracion_metodo_interfaz '}'                               { printf ("\n\tcuerpo_interfaz -> { list_decl_metodo_inferfaz }"); }
     ;
 
 declaracion_metodo_interfaz 
-    : firma_funcion ';'                                                       { printf ("\tdecl_metodo_inferfaz -> firma_funcion\n"); }
-    | NEW firma_funcion ';'                                                   { printf ("\tdecl_metodo_inferfaz -> NEW firma_funcion\n"); }
+    : firma_funcion ';'                                                       { printf ("\n\tdecl_metodo_inferfaz -> firma_funcion"); }
+    | NEW firma_funcion ';'                                                   { printf ("\n\tdecl_metodo_inferfaz -> NEW firma_funcion"); }
     ;
 
 lista_declaracion_metodo_interfaz 
-    : declaracion_metodo_interfaz                                             { printf ("\tlist_decl_metodo_inferfaz -> decl_metodo_inferfaz\n"); }
-    | lista_declaracion_metodo_interfaz declaracion_metodo_interfaz           { printf ("\tlist_decl_metodo_inferfaz -> list_decl_metodo_inferfaz decl_metodo_inferfaz\n"); }
+    : declaracion_metodo_interfaz                                             { printf ("\n\tlist_decl_metodo_inferfaz -> decl_metodo_inferfaz"); }
+    | lista_declaracion_metodo_interfaz declaracion_metodo_interfaz           { printf ("\n\tlist_decl_metodo_inferfaz -> list_decl_metodo_inferfaz decl_metodo_inferfaz"); }
     ;
 
 declaracion_enum 
-    : ENUM IDENTIFICADOR cuerpo_enum                                          { printf ("\tdecl_enum -> ENUM ID cuerpo_enum\n"); }
-    | ENUM IDENTIFICADOR ':' tipo_escalar cuerpo_enum                         { printf ("\tdecl_enum -> ENUM ID tipo_escalar cuerpo_enum\n"); }
-    | lista_modificador ENUM IDENTIFICADOR cuerpo_enum                        { printf ("\tdecl_enum -> list_mod ENUM ID cuerpo_enum\n"); }
-    | lista_modificador ENUM IDENTIFICADOR ':' tipo_escalar cuerpo_enum       { printf ("\tdecl_enum -> list_mod ENUM ID tipo_escalar cuerpo_enum\n"); }
+    : ENUM IDENTIFICADOR cuerpo_enum                                          { printf ("\n\tdecl_enum -> ENUM ID cuerpo_enum"); }
+    | ENUM IDENTIFICADOR ':' tipo_escalar cuerpo_enum                         { printf ("\n\tdecl_enum -> ENUM ID tipo_escalar cuerpo_enum"); }
+    | lista_modificador ENUM IDENTIFICADOR cuerpo_enum                        { printf ("\n\tdecl_enum -> list_mod ENUM ID cuerpo_enum"); }
+    | lista_modificador ENUM IDENTIFICADOR ':' tipo_escalar cuerpo_enum       { printf ("\n\tdecl_enum -> list_mod ENUM ID tipo_escalar cuerpo_enum"); }
     ;
 
 cuerpo_enum 
-    : '{' lista_declaracion_miembro_enum '}'                                  { printf ("\tcuerpo_enum -> { list_decl_miembro_enum }\n"); }
+    : '{' lista_declaracion_miembro_enum '}'                                  { printf ("\n\tcuerpo_enum -> { list_decl_miembro_enum }"); }
     ;
 
 declaracion_miembro_enum 
-    : IDENTIFICADOR                                                           { printf ("\tdecl_miembro_enum -> ID\n"); }
-    | IDENTIFICADOR '=' expresion                                             { printf ("\tdecl_miembro_enum -> ID = exp\n"); }
+    : IDENTIFICADOR                                                           { printf ("\n\tdecl_miembro_enum -> ID"); }
+    | IDENTIFICADOR '=' expresion                                             { printf ("\n\tdecl_miembro_enum -> ID = exp"); }
     ;
 
 lista_declaracion_miembro_enum 
-    : declaracion_miembro_enum                                                { printf ("\tlist_decl_miembro_enum -> decl_miembro_enum\n"); }
-    | lista_declaracion_miembro_enum ',' declaracion_miembro_enum             { printf ("\tlist_decl_miembro_enum -> list_decl_miembro_enum decl_miembro_enum\n"); }
+    : declaracion_miembro_enum                                                { printf ("\n\tlist_decl_miembro_enum -> decl_miembro_enum"); }
+    | lista_declaracion_miembro_enum ',' declaracion_miembro_enum             { printf ("\n\tlist_decl_miembro_enum -> list_decl_miembro_enum decl_miembro_enum"); }
     ;
 
 /**********/
 /* CLASES */
 /**********/
 declaracion_clase 
-    : CLASS IDENTIFICADOR herencia cuerpo_clase                               { printf ("\tdecl_clase -> CLASS ID herencia cuerpo_clase\n"); }     
-    | lista_modificador CLASS IDENTIFICADOR herencia cuerpo_clase             { printf ("\tdecl_clase -> list_mod CLASS ID herencia cuerpo_clase\n"); }
+    : CLASS IDENTIFICADOR herencia cuerpo_clase                               { printf ("\n\tdecl_clase -> CLASS ID herencia cuerpo_clase"); }     
+    | lista_modificador CLASS IDENTIFICADOR herencia cuerpo_clase             { printf ("\n\tdecl_clase -> list_mod CLASS ID herencia cuerpo_clase"); }
     ;
 
 cuerpo_clase 
-    : '{' lista_declaracion_elemento_clase '}'                                { printf ("\tcuerpo_clase -> list_decl_elem_clase\n"); }
+    : '{' lista_declaracion_elemento_clase '}'                                { printf ("\n\tcuerpo_clase -> list_decl_elem_clase"); }
     ;
 
 declaracion_elemento_clase 
-    : declaracion_tipo                                                        { printf ("\tdecl_elem_clase -> decl_tipo\n"); }
-    | declaracion_atributo                                                    { printf ("\tdecl_elem_clase -> declaracion_atributo\n"); }
-    | declaracion_metodo                                                      { printf ("\tdecl_elem_clase -> decl_metodo\n"); }
-    | declaracion_constructor                                                 { printf ("\tdecl_elem_clase -> decl_constructor\n"); }
-    | declaracion_destructor                                                  { printf ("\tdecl_elem_clase -> decl_destructor\n"); }
-    | declaracion_atributo                                                    { printf ("\tdecl_elem_clase -> decl_atributo\n"); }
+    : declaracion_tipo                                                        { printf ("\n\tdecl_elem_clase -> decl_tipo"); }
+    | declaracion_atributo                                                    { printf ("\n\tdecl_elem_clase -> declaracion_atributo"); }
+    | declaracion_metodo                                                      { printf ("\n\tdecl_elem_clase -> decl_metodo"); }
+    | declaracion_constructor                                                 { printf ("\n\tdecl_elem_clase -> decl_constructor"); }
+    | declaracion_destructor                                                  { printf ("\n\tdecl_elem_clase -> decl_destructor"); }
+    | declaracion_atributo                                                    { printf ("\n\tdecl_elem_clase -> decl_atributo"); }
     ;
 
 lista_declaracion_elemento_clase 
-    : declaracion_elemento_clase                                              { printf ("\tlist_decl_elem_clase -> decl_elem_clase\n"); }
-    | lista_declaracion_elemento_clase declaracion_elemento_clase             { printf ("\tlist_decl_elem_clase -> list_decl_elem_clase decl_elem_clase\n"); }
+    : declaracion_elemento_clase                                              { printf ("\n\tlist_decl_elem_clase -> decl_elem_clase"); }
+    | lista_declaracion_elemento_clase declaracion_elemento_clase             { printf ("\n\tlist_decl_elem_clase -> list_decl_elem_clase decl_elem_clase"); }
     ;
 
 declaracion_atributo 
-    : declaracion_variable                                                    { printf ("\tdecl_atributo -> decl_var\n"); }
-    | lista_modificador declaracion_variable                                  { printf ("\tdecl_atributo -> list_mod decl_var\n"); }
+    : declaracion_variable                                                    { printf ("\n\tdecl_atributo -> decl_var"); }
+    | lista_modificador declaracion_variable                                  { printf ("\n\tdecl_atributo -> list_mod decl_var"); }
     ;
 
 declaracion_metodo 
-    : firma_funcion bloque_instrucciones                                      { printf ("\tdecl_metodo -> firma_funcion bloque_instrucciones\n"); }
-    | lista_modificador firma_funcion bloque_instrucciones                    { printf ("\tdecl_metodo -> list_mod firma_funcion bloque_instrucciones\n"); }
+    : firma_funcion bloque_instrucciones                                      { printf ("\n\tdecl_metodo -> firma_funcion bloque_instrucciones"); }
+    | lista_modificador firma_funcion bloque_instrucciones                    { printf ("\n\tdecl_metodo -> list_mod firma_funcion bloque_instrucciones"); }
     ;
 
 declaracion_constructor 
-    : cabecera_constructor bloque_instrucciones                               { printf ("\tdecl_constructor -> cabecera_constructor bloque_instrucciones\n"); }
-    | lista_modificador cabecera_constructor bloque_instrucciones             { printf ("\tdecl_constructor -> list_mod cabecera_constructor bloque_instrucciones\n"); }
+    : cabecera_constructor bloque_instrucciones                               { printf ("\n\tdecl_constructor -> cabecera_constructor bloque_instrucciones"); }
+    | lista_modificador cabecera_constructor bloque_instrucciones             { printf ("\n\tdecl_constructor -> list_mod cabecera_constructor bloque_instrucciones"); }
     ;
 
 cabecera_constructor 
-    : IDENTIFICADOR                                                           { printf ("\tcabecera_constructor -> ID\n"); }
-    | IDENTIFICADOR parametros inicializador_constructor                      { printf ("\tcabecera_constructor -> ID parametros inicializador_constructor\n"); }
-    | IDENTIFICADOR parametros                                                { printf ("\tcabecera_constructor -> ID parametros\n"); }
-    | IDENTIFICADOR inicializador_constructor                                 { printf ("\tcabecera_constructor -> ID inicializador_constructor\n"); }
+    : IDENTIFICADOR                                                           { printf ("\n\tcabecera_constructor -> ID"); }
+    | IDENTIFICADOR parametros inicializador_constructor                      { printf ("\n\tcabecera_constructor -> ID parametros inicializador_constructor"); }
+    | IDENTIFICADOR parametros                                                { printf ("\n\tcabecera_constructor -> ID parametros"); }
+    | IDENTIFICADOR inicializador_constructor                                 { printf ("\n\tcabecera_constructor -> ID inicializador_constructor"); }
     ;
 
 inicializador_constructor 
-    : ':' BASE parametros                                                     { printf ("\tinicializador_constructor -> BASE parametros\n"); }
-    | ':' THIS parametros                                                     { printf ("\tinicializador_constructor -> THIS parametros\n"); }
+    : ':' BASE parametros                                                     { printf ("\n\tinicializador_constructor -> BASE parametros"); }
+    | ':' THIS parametros                                                     { printf ("\n\tinicializador_constructor -> THIS parametros"); }
     ;
 
 declaracion_destructor 
-    : cabecera_destructor bloque_instrucciones                                { printf ("\tdecl_destructor -> cabecera_destructor bloque_instrucciones\n"); }
-    | lista_modificador cabecera_destructor bloque_instrucciones              { printf ("\tdecl_destructor -> list_mod cabecera_destructor bloque_instrucciones\n"); }
+    : cabecera_destructor bloque_instrucciones                                { printf ("\n\tdecl_destructor -> cabecera_destructor bloque_instrucciones"); }
+    | lista_modificador cabecera_destructor bloque_instrucciones              { printf ("\n\tdecl_destructor -> list_mod cabecera_destructor bloque_instrucciones"); }
     ;
 
 cabecera_destructor 
-    : '~' IDENTIFICADOR '(' ')'                                               { printf ("\tcabecera_destructor -> ~ ID ()\n"); }
+    : '~' IDENTIFICADOR '(' ')'                                               { printf ("\n\tcabecera_destructor -> ~ ID ()"); }
     ;
 
 /*************/
 /* FUNCIONES */
 /*************/
 declaracion_funcion 
-    : firma_funcion bloque_instrucciones                                      { printf ("\tdecl_func -> firma_funcion bloque_instrucciones\n"); }
+    : firma_funcion bloque_instrucciones                                      { printf ("\n\tdecl_func -> firma_funcion bloque_instrucciones"); }
     ;
 
 firma_funcion 
-    : VOID IDENTIFICADOR parametros                                           { printf ("\tfirma_funcion -> VOID ID parametros\n"); }
-    | tipo IDENTIFICADOR parametros                                           { printf ("\tfirma_funcion -> tipo ID parametros\n"); }
-    | tipo lista_asterisco IDENTIFICADOR parametros                           { printf ("\tfirma_funcion -> tipo list_asterisco ID parametros\n"); }
+    : VOID IDENTIFICADOR parametros                                           { printf ("\n\tfirma_funcion -> VOID ID parametros"); }
+    | tipo IDENTIFICADOR parametros                                           { printf ("\n\tfirma_funcion -> tipo ID parametros"); }
+    | tipo lista_asterisco IDENTIFICADOR parametros                           { printf ("\n\tfirma_funcion -> tipo list_asterisco ID parametros"); }
     ;
 
 lista_asterisco
-    : '*'                                                                     { printf ("\tlist_asterisco -> *\n"); } 
-    | lista_asterisco '*'                                                     { printf ("\tlist_asterisco -> list_asterisco *\n"); }
+    : '*'                                                                     { printf ("\n\tlist_asterisco -> *"); } 
+    | lista_asterisco '*'                                                     { printf ("\n\tlist_asterisco -> list_asterisco *"); }
     ;
 
 parametros 
-    : '(' ')'                                                                 { printf ("\tparametros -> ()\n"); }
-    | '(' lista_argumentos ')'                                                { printf ("\tparametros -> ( list_argumentos )\n"); }
+    : '(' ')'                                                                 { printf ("\n\tparametros -> ()"); }
+    | '(' lista_argumentos ')'                                                { printf ("\n\tparametros -> ( list_argumentos )"); }
     ;
 
 argumentos 
-    : nombre_tipo lista_variable                                              { printf ("\targumentos -> nom_tipo list_var\n"); }
+    : nombre_tipo lista_variable                                              { printf ("\n\targumentos -> nom_tipo list_var"); }
     ;
 
 lista_argumentos 
-    : argumentos                                                              { printf ("\tlist_argumentos -> argumentos\n"); }
-    | lista_argumentos ';' argumentos                                         { printf ("\tlist_argumentos -> list_argumentos argumentos\n"); }
+    : argumentos                                                              { printf ("\n\tlist_argumentos -> argumentos"); }
+    | lista_argumentos ';' argumentos                                         { printf ("\n\tlist_argumentos -> list_argumentos argumentos"); }
     ;
 
 nombre_tipo 
-    : tipo                                                                    { printf ("\tnom_tipo -> tipo\n"); }
-    | tipo lista_asterisco                                                    { printf ("\tnom_tipo -> tipo list_asterisco\n"); }
+    : tipo                                                                    { printf ("\n\tnom_tipo -> tipo"); }
+    | tipo lista_asterisco                                                    { printf ("\n\tnom_tipo -> tipo list_asterisco"); }
     ;
 
 variable
-    : IDENTIFICADOR                                                           { printf ("\tvar -> ID\n"); }
-    | IDENTIFICADOR '=' expresion                                             { printf ("\tvar -> ID = exp\n"); }
+    : IDENTIFICADOR                                                           { printf ("\n\tvar -> ID"); }
+    | IDENTIFICADOR '=' expresion                                             { printf ("\n\tvar -> ID = exp"); }
     ;
 
 lista_variable 
-    : variable                                                                { printf ("\tlist_var -> var\n"); }
-    | lista_variable ',' variable                                             { printf ("\tlist_var -> list_var var\n"); }
+    : variable                                                                { printf ("\n\tlist_var -> var"); }
+    | lista_variable ',' variable                                             { printf ("\n\tlist_var -> list_var var"); }
     ;
 
 /*****************/
 /* INSTRUCCIONES */
 /*****************/
 instruccion 
-    : bloque_instrucciones                                                    { printf ("\tinstruccion -> bloque_instrucciones\n"); }
-    | instruccion_expresion                                                   { printf ("\tinstruccion -> instruccion_exp\n"); }
-    | instruccion_bifurcacion                                                 { printf ("\tinstruccion -> instruccion_bifurcacion\n"); }
-    | instruccion_bucle                                                       { printf ("\tinstruccion -> instruccion_bucle\n"); }
-    | instruccion_salto                                                       { printf ("\tinstruccion -> instruccion_salto\n"); }
-    | instruccion_destino_salto                                               { printf ("\tinstruccion -> instruccion_destino_salto\n"); }
-    | instruccion_retorno                                                     { printf ("\tinstruccion -> instruccion_retorno\n"); }
-    | instruccion_lanzamiento_excepcion                                       { printf ("\tinstruccion -> instruccion_lanzamiento_excepcion\n"); }
-    | instruccion_captura_excepcion                                           { printf ("\tinstruccion -> instruccion_captura_excepcion\n"); }
-    | instruccion_vacia                                                       { printf ("\tinstruccion -> instruccion_vacia\n"); }
+    : bloque_instrucciones                                                    { printf ("\n\tinstruccion -> bloque_instrucciones"); }
+    | instruccion_expresion                                                   { printf ("\n\tinstruccion -> instruccion_exp"); }
+    | instruccion_bifurcacion                                                 { printf ("\n\tinstruccion -> instruccion_bifurcacion"); }
+    | instruccion_bucle                                                       { printf ("\n\tinstruccion -> instruccion_bucle"); }
+    | instruccion_salto                                                       { printf ("\n\tinstruccion -> instruccion_salto"); }
+    | instruccion_destino_salto                                               { printf ("\n\tinstruccion -> instruccion_destino_salto"); }
+    | instruccion_retorno                                                     { printf ("\n\tinstruccion -> instruccion_retorno"); }
+    | instruccion_lanzamiento_excepcion                                       { printf ("\n\tinstruccion -> instruccion_lanzamiento_excepcion"); }
+    | instruccion_captura_excepcion                                           { printf ("\n\tinstruccion -> instruccion_captura_excepcion"); }
+    | instruccion_vacia                                                       { printf ("\n\tinstruccion -> instruccion_vacia"); }
     ;
 
 lista_instruccion 
-    : instruccion                                                             { printf ("\tlist_instruccion -> instruccion\n"); }
-    | lista_instruccion instruccion                                           { printf ("\tlist_instruccion -> list_instruccion instruccion\n"); }
+    : instruccion                                                             { printf ("\n\tlist_instruccion -> instruccion"); }
+    | lista_instruccion instruccion                                           { printf ("\n\tlist_instruccion -> list_instruccion instruccion"); }
     ;
 
 bloque_instrucciones 
-    : '{' '}'                                                                 { printf ("\tbloque_instrucciones -> {}\n"); }
-    | '{' lista_declaracion '}'                                               { printf ("\tbloque_instrucciones -> { list_decl }\n"); }
-    | '{' lista_instruccion '}'                                               { printf ("\tbloque_instrucciones -> { list_instruccion }\n"); }
-    | '{' lista_declaracion lista_instruccion '}'                             { printf ("\tbloque_instrucciones -> { list_decl list_instruccion }\n"); }
+    : '{' '}'                                                                 { printf ("\n\tbloque_instrucciones -> {}"); }
+    | '{' lista_declaracion '}'                                               { printf ("\n\tbloque_instrucciones -> { list_decl }"); }
+    | '{' lista_instruccion '}'                                               { printf ("\n\tbloque_instrucciones -> { list_instruccion }"); }
+    | '{' lista_declaracion lista_instruccion '}'                             { printf ("\n\tbloque_instrucciones -> { list_decl list_instruccion }"); }
     ;
 
 instruccion_expresion 
-    : expresion_funcional ';'                                                 { printf ("\tinstruccion_expresion -> exp_funcional\n"); }
-    | asignacion ';'                                                          { printf ("\tinstruccion_expresion -> asignacion\n"); }
+    : expresion_funcional ';'                                                 { printf ("\n\tinstruccion_expresion -> exp_funcional"); }
+    | asignacion ';'                                                          { printf ("\n\tinstruccion_expresion -> asignacion"); }
     ;
 
 asignacion 
-    : expresion_indexada operador_asignacion expresion                        { printf ("\tasignacion -> exp_index op_asignacion exp\n"); }
+    : expresion_indexada operador_asignacion expresion                        { printf ("\n\tasignacion -> exp_index op_asignacion exp"); }
     ;
 
 operador_asignacion 
-    : '='                                                                     { printf ("\top_asignacion -> =\n"); }
-    | MULT_ASIG                                                               { printf ("\top_asignacion -> MULT_ASIG\n"); }
-    | DIV_ASIG                                                                { printf ("\top_asignacion -> DIV_ASIG\n"); }
-    | MOD_ASIG                                                                { printf ("\top_asignacion -> MOD_ASIG\n"); }
-    | SUMA_ASIG                                                               { printf ("\top_asignacion -> SUMA_ASIG\n"); }
-    | RESTA_ASIG                                                              { printf ("\top_asignacion -> RESTA_ASIG\n"); }
-    | DESPI_ASIG                                                              { printf ("\top_asignacion -> DESPI_ASIG\n"); }
-    | DESPD_ASIG                                                              { printf ("\top_asignacion -> DESPD_ASIG\n"); }
-    | AND_ASIG                                                                { printf ("\top_asignacion -> AND_ASIG\n"); }
-    | XOR_ASIG                                                                { printf ("\top_asignacion -> XOR_ASIG\n"); }
-    | OR_ASIG                                                                 { printf ("\top_asignacion -> OR_ASIG\n"); }
+    : '='                                                                     { printf ("\n\top_asignacion -> ="); }
+    | MULT_ASIG                                                               { printf ("\n\top_asignacion -> MULT_ASIG"); }
+    | DIV_ASIG                                                                { printf ("\n\top_asignacion -> DIV_ASIG"); }
+    | MOD_ASIG                                                                { printf ("\n\top_asignacion -> MOD_ASIG"); }
+    | SUMA_ASIG                                                               { printf ("\n\top_asignacion -> SUMA_ASIG"); }
+    | RESTA_ASIG                                                              { printf ("\n\top_asignacion -> RESTA_ASIG"); }
+    | DESPI_ASIG                                                              { printf ("\n\top_asignacion -> DESPI_ASIG"); }
+    | DESPD_ASIG                                                              { printf ("\n\top_asignacion -> DESPD_ASIG"); }
+    | AND_ASIG                                                                { printf ("\n\top_asignacion -> AND_ASIG"); }
+    | XOR_ASIG                                                                { printf ("\n\top_asignacion -> XOR_ASIG"); }
+    | OR_ASIG                                                                 { printf ("\n\top_asignacion -> OR_ASIG"); }
     ;
 
 instruccion_bifurcacion 
-    : IF '(' expresion ')' instruccion                                        { printf ("\tinstruccion_bifurcacion -> IF ( exp ) instruccion\n"); }
-    | IF '(' expresion ')' instruccion ELSE instruccion                       { printf ("\tinstruccion_bifurcacion -> IF ( exp ) instruccion ELSE instruccion\n"); }
-    | SWITCH '(' expresion ')' '{' lista_instruccion_caso '}'                 { printf ("\tinstruccion_bifurcacion -> SWITCH ( exp ) { list_instruccion_caso }\n"); }
+    : IF '(' expresion ')' instruccion                                        { printf ("\n\tinstruccion_bifurcacion -> IF ( exp ) instruccion"); }
+    | IF '(' expresion ')' instruccion ELSE instruccion                       { printf ("\n\tinstruccion_bifurcacion -> IF ( exp ) instruccion ELSE instruccion"); }
+    | SWITCH '(' expresion ')' '{' lista_instruccion_caso '}'                 { printf ("\n\tinstruccion_bifurcacion -> SWITCH ( exp ) { list_instruccion_caso }"); }
     ;
 
 instruccion_caso 
-    : CASE expresion ':' instruccion                                          { printf ("\tinstruccion_caso -> CASE exp instruccion\n"); }
-    | DEFAULT ':' instruccion                                                 { printf ("\tinstruccion_caso -> DEFAULT instruccion\n"); }
+    : CASE expresion ':' instruccion                                          { printf ("\n\tinstruccion_caso -> CASE exp instruccion"); }
+    | DEFAULT ':' instruccion                                                 { printf ("\n\tinstruccion_caso -> DEFAULT instruccion"); }
     ;
 
 lista_instruccion_caso
-    : instruccion_caso                                                        { printf ("\tlist_instruccion_caso -> instruccion_caso\n"); }
-    | lista_instruccion_caso instruccion_caso                                 { printf ("\tlist_instruccion_caso -> list_instruccion_caso instruccion_caso\n"); }
+    : instruccion_caso                                                        { printf ("\n\tlist_instruccion_caso -> instruccion_caso"); }
+    | lista_instruccion_caso instruccion_caso                                 { printf ("\n\tlist_instruccion_caso -> list_instruccion_caso instruccion_caso"); }
     ;
 
 instruccion_bucle 
-    : WHILE '(' expresion ')' instruccion                                     { printf ("\tinstruccion_bucle -> WHILE ( exp ) instruccion\n"); } 
-    | DO instruccion WHILE '(' expresion ')' ';'                              { printf ("\tinstruccion_bucle -> DO instruccion WHILE ( exp )\n"); } 
-    | FOR '(' ';' expresion ';' lista_expresion ')' instruccion               { printf ("\tinstruccion_bucle -> FOR ( exp list_exp ) instruccion\n"); } 
-    | FOR '(' lista_asignacion ';' expresion ';' lista_expresion ')' instruccion { printf ("\tinstruccion_bucle -> FOR ( list_asignacion exp list_exp ) instruccion\n"); } 
+    : WHILE '(' expresion ')' instruccion                                     { printf ("\n\tinstruccion_bucle -> WHILE ( exp ) instruccion"); } 
+    | DO instruccion WHILE '(' expresion ')' ';'                              { printf ("\n\tinstruccion_bucle -> DO instruccion WHILE ( exp )"); } 
+    | FOR '(' ';' expresion ';' lista_expresion ')' instruccion               { printf ("\n\tinstruccion_bucle -> FOR ( exp list_exp ) instruccion"); } 
+    | FOR '(' lista_asignacion ';' expresion ';' lista_expresion ')' instruccion { printf ("\n\tinstruccion_bucle -> FOR ( list_asignacion exp list_exp ) instruccion"); } 
     ;
 
 lista_asignacion 
-    : asignacion                                                              { printf ("\tlist_asignacion -> asignacion\n"); } 
-    | lista_asignacion asignacion                                             { printf ("\tlist_asignacion -> list_asignacion asignacion\n"); } 
+    : asignacion                                                              { printf ("\n\tlist_asignacion -> asignacion"); } 
+    | lista_asignacion asignacion                                             { printf ("\n\tlist_asignacion -> list_asignacion asignacion"); } 
     ;
 
 instruccion_salto 
-    : GOTO IDENTIFICADOR ';'                                                  { printf ("\tinstruccion_salto -> GOTO ID\n"); } 
-    | CONTINUE ';'                                                            { printf ("\tinstruccion_salto -> CONTINUE\n"); } 
-    | BREAK ';'                                                               { printf ("\tinstruccion_salto -> BREAK\n"); } 
+    : GOTO IDENTIFICADOR ';'                                                  { printf ("\n\tinstruccion_salto -> GOTO ID"); } 
+    | CONTINUE ';'                                                            { printf ("\n\tinstruccion_salto -> CONTINUE"); } 
+    | BREAK ';'                                                               { printf ("\n\tinstruccion_salto -> BREAK"); } 
     ;
 
 instruccion_destino_salto 
-    : IDENTIFICADOR ':' instruccion ';'                                       { printf ("\tinstruccion_destino_salto -> ID instruccion\n"); } 
+    : IDENTIFICADOR ':' instruccion ';'                                       { printf ("\n\tinstruccion_destino_salto -> ID instruccion"); } 
     ;
 
 instruccion_retorno 
-    : RETURN ';'                                                              { printf ("\tinstruccion_retorno -> RETURN\n"); } 
-    | RETURN expresion ';'                                                    { printf ("\tinstruccion_retorno -> RETURN exp\n"); } 
+    : RETURN ';'                                                              { printf ("\n\tinstruccion_retorno -> RETURN"); } 
+    | RETURN expresion ';'                                                    { printf ("\n\tinstruccion_retorno -> RETURN exp"); } 
     ;
 
 instruccion_lanzamiento_excepcion 
-    : THROW expresion ';'                                                     { printf ("\tinstruccion_lanzamiento_excepcion -> THROW exp\n"); } 
+    : THROW expresion ';'                                                     { printf ("\n\tinstruccion_lanzamiento_excepcion -> THROW exp"); } 
     ;
 
 instruccion_captura_excepcion 
-    : TRY bloque_instrucciones clausulas-catch                                { printf ("\tinstruccion_captura_excepcion -> TRY  bloque_instrucciones clausulas-catch\n"); } 
-    | TRY bloque_instrucciones clausula_finally                               { printf ("\tinstruccion_captura_excepcion -> TRY  bloque_instrucciones clausula_finally\n"); } 
-    | TRY bloque_instrucciones clausulas-catch clausula_finally               { printf ("\tinstruccion_captura_excepcion -> TRY  bloque_instrucciones clausulas-catch clausula_finally\n"); } 
+    : TRY bloque_instrucciones clausulas-catch                                { printf ("\n\tinstruccion_captura_excepcion -> TRY  bloque_instrucciones clausulas-catch"); } 
+    | TRY bloque_instrucciones clausula_finally                               { printf ("\n\tinstruccion_captura_excepcion -> TRY  bloque_instrucciones clausula_finally"); } 
+    | TRY bloque_instrucciones clausulas-catch clausula_finally               { printf ("\n\tinstruccion_captura_excepcion -> TRY  bloque_instrucciones clausulas-catch clausula_finally"); } 
     ;
 
 clausulas-catch 
-    : lista_clausula_catch_especifica                                         { printf ("\tclausulas-catch -> list_clausula_catch_especifica\n"); } 
-    | clausula_catch_general                                                  { printf ("\tclausulas-catch -> clausula_catch_general\n"); } 
-    | lista_clausula_catch_especifica clausula_catch_general                  { printf ("\tclausulas-catch -> list_clausula_catch_especifica clausula_catch_general\n"); } 
+    : lista_clausula_catch_especifica                                         { printf ("\n\tclausulas-catch -> list_clausula_catch_especifica"); } 
+    | clausula_catch_general                                                  { printf ("\n\tclausulas-catch -> clausula_catch_general"); } 
+    | lista_clausula_catch_especifica clausula_catch_general                  { printf ("\n\tclausulas-catch -> list_clausula_catch_especifica clausula_catch_general"); } 
     ;
 
 clausula_catch_especifica 
-    : CATCH '(' nombre_tipo ')' bloque_instrucciones                          { printf ("\tclausula_catch_especifica -> CATCH '(' nom_tipo ')' bloque_instrucciones\n"); } 
+    : CATCH '(' nombre_tipo ')' bloque_instrucciones                          { printf ("\n\tclausula_catch_especifica -> CATCH '(' nom_tipo ')' bloque_instrucciones"); } 
     ;
 
 lista_clausula_catch_especifica 
-    : lista_clausula_catch_especifica clausula_catch_especifica               { printf ("\tlist_clausula_catch_especifica -> list_clausula_catch_especifica clausula_catch_especifica\n"); } 
+    : lista_clausula_catch_especifica clausula_catch_especifica               { printf ("\n\tlist_clausula_catch_especifica -> list_clausula_catch_especifica clausula_catch_especifica"); } 
     ;
 
 clausula_catch_general 
-    : CATCH bloque_instrucciones                                              { printf ("\tclausula_catch_general -> CATCH bloque_instrucciones\n"); } 
+    : CATCH bloque_instrucciones                                              { printf ("\n\tclausula_catch_general -> CATCH bloque_instrucciones"); } 
     ;
 
 clausula_finally 
-    : FINALLY bloque_instrucciones                                            { printf ("\tclausula_finally -> FINALLY bloque_instrucciones\n"); } 
+    : FINALLY bloque_instrucciones                                            { printf ("\n\tclausula_finally -> FINALLY bloque_instrucciones"); } 
     ;
 
 instruccion_retorno 
-    : RETURN ';'                                                              { printf ("\tinstruccion_retorno -> RETURN\n"); } 
-    | RETURN expresion ';'                                                    { printf ("\tinstruccion_retorno -> RETURN exp\n"); } 
+    : RETURN ';'                                                              { printf ("\n\tinstruccion_retorno -> RETURN"); } 
+    | RETURN expresion ';'                                                    { printf ("\n\tinstruccion_retorno -> RETURN exp"); } 
     ;
 
 instruccion_vacia
-    : ';'                                                                     { printf ("\tinstruccion_vacia -> ;\n"); } 
+    : ';'                                                                     { printf ("\n\tinstruccion_vacia -> ;"); } 
     ;
 /***************/
 /* EXPRESIONES */
 /***************/
 
-expresion
-    : expresion_constante                                                     { printf ("\texp -> exp_cons\n"); } 
-    | expresion_parentesis                                                    { printf ("\texp -> exp_parentesis\n"); } 
-    | expresion_funcional                                                     { printf ("\texp -> exp_funcional\n"); } 
-    | expresion_creacion_objeto                                               { printf ("\texp -> exp_creacion_objeto\n"); } 
-    | expresion_indexada                                                      { printf ("\texp -> exp_index\n"); } 
-    | expresion_postfija                                                      { printf ("\texp -> exp_posfija\n"); } 
-    | expresion_prefija                                                       { printf ("\texp -> exp_prefija\n"); } 
-    | expresion_cast                                                          { printf ("\texp -> exp_cast\n"); } 
-    ;
-
 expresion_constante 
-    : ENTERO                                                                  { printf ("\texpresion_constante -> ENTERO\n"); } 
-    | REAL                                                                    { printf ("\texpresion_constante -> REAL\n"); } 
-    | CADENA                                                                  { printf ("\texpresion_constante -> CADENA\n"); } 
-    | CARACTER                                                                { printf ("\texpresion_constante -> CARACTER\n"); } 
-    | BOOLEANO                                                                { printf ("\texpresion_constante -> BOOLEANO\n"); } 
+    : ENTERO                                                                  { printf ("\n\texpresion_constante -> ENTERO"); } 
+    | REAL                                                                    { printf ("\n\texpresion_constante -> REAL"); } 
+    | CADENA                                                                  { printf ("\n\texpresion_constante -> CADENA"); } 
+    | CARACTER                                                                { printf ("\n\texpresion_constante -> CARACTER"); } 
+    | BOOLEANO                                                                { printf ("\n\texpresion_constante -> BOOLEANO"); } 
     ;
 
 expresion_parentesis 
-    : '(' expresion ')'                                                       { printf ("\texpresion_parentesis -> ( exp )\n"); } 
+    : '(' expresion ')'                                                       { printf ("\n\texpresion_parentesis -> ( exp )"); } 
     ;
 
 expresion_funcional 
-    : identificador_anidado '(' ')'                                           { printf ("\texpresion_funcional -> id_anid ()\n"); } 
-    | identificador_anidado '(' lista_expresion ')'                           { printf ("\texpresion_funcional -> id_anid ( list_exp )\n"); } 
+    : identificador_anidado '(' ')'                                           { printf ("\n\texpresion_funcional -> id_anid ()"); } 
+    | identificador_anidado '(' lista_expresion ')'                           { printf ("\n\texpresion_funcional -> id_anid ( list_exp )"); } 
     ;
 
 expresion_creacion_objeto 
-    : NEW identificador_anidado '(' ')'                                       { printf ("\texpresion_creacion_objeto -> NEW id_anid ()\n"); } 
-    | NEW identificador_anidado '(' lista_expresion ')'                       { printf ("\texpresion_creacion_objeto -> NEW id_anid ( list_exp )\n"); } 
+    : NEW identificador_anidado '(' ')'                                       { printf ("\n\texpresion_creacion_objeto -> NEW id_anid ()"); } 
+    | NEW identificador_anidado '(' lista_expresion ')'                       { printf ("\n\texpresion_creacion_objeto -> NEW id_anid ( list_exp )"); } 
     ;
 
 expresion_indexada 
-    : identificador_anidado                                                   { printf ("\texpresion_indexada -> id_anid\n"); } 
-    | expresion_indexada '[' expresion ']'                                    { printf ("\texpresion_indexada -> exp_index [ exp ]\n"); } 
-    | expresion_indexada PTR_ACCESO identificador_anidado                     { printf ("\texpresion_indexada -> exp_index -> id_anid\n"); } 
+    : identificador_anidado                                                   { printf ("\n\texpresion_indexada -> id_anid"); } 
+    | expresion_indexada '[' expresion ']'                                    { printf ("\n\texpresion_indexada -> exp_index [ exp ]"); } 
+    | expresion_indexada PTR_ACCESO identificador_anidado                     { printf ("\n\texpresion_indexada -> exp_index -> id_anid"); } 
     ;
 
 expresion_postfija 
-    : expresion_constante                                                     { printf ("\texpresion_postfija -> exp_cons\n"); } 
-    | expresion_parentesis                                                    { printf ("\texpresion_postfija -> exp_parentesis\n"); } 
-    | expresion_funcional                                                     { printf ("\texpresion_postfija -> exp_funcional\n"); } 
-    | expresion_creacion_objeto                                               { printf ("\texpresion_postfija -> exp_creacion_objeto\n"); } 
-    | expresion_indexada                                                      { printf ("\texpresion_postfija -> exp_index\n"); } 
-    | expresion_postfija INC                                                  { printf ("\texpresion_postfija -> exp_postfija INC\n"); } 
-    | expresion_postfija DEC                                                  { printf ("\texpresion_postfija -> exp_posfija DEC\n"); } 
+    : expresion_constante                                                     { printf ("\n\texpresion_postfija -> exp_cons"); } 
+    | expresion_parentesis                                                    { printf ("\n\texpresion_postfija -> exp_parentesis"); } 
+    | expresion_funcional                                                     { printf ("\n\texpresion_postfija -> exp_funcional"); } 
+    | expresion_creacion_objeto                                               { printf ("\n\texpresion_postfija -> exp_creacion_objeto"); } 
+    | expresion_indexada                                                      { printf ("\n\texpresion_postfija -> exp_index"); } 
+    | expresion_postfija INC                                                  { printf ("\n\texpresion_postfija -> exp_postfija INC"); } 
+    | expresion_postfija DEC                                                  { printf ("\n\texpresion_postfija -> exp_posfija DEC"); } 
     ;
 
 expresion_prefija 
-    : expresion_postfija                                                      { printf ("\texpresion_prefija -> exp_posfija\n"); } 
-    | SIZEOF expresion_prefija                                                { printf ("\texpresion_prefija -> SIZEOF exp_prefija\n"); } 
-    | SIZEOF '(' nombre_tipo ')'                                              { printf ("\texpresion_prefija -> SIZEOF ( nom_tipo )\n"); } 
-    | operador_prefijo expresion_cast                                         { printf ("\texpresion_prefija -> op_prefijo exp_cast\n"); } 
+    : expresion_postfija                                                      { printf ("\n\texpresion_prefija -> exp_posfija"); } 
+    | SIZEOF expresion_prefija                                                { printf ("\n\texpresion_prefija -> SIZEOF exp_prefija"); } 
+    | SIZEOF '(' nombre_tipo ')'                                              { printf ("\n\texpresion_prefija -> SIZEOF ( nom_tipo )"); } 
+    | operador_prefijo expresion_cast                                         { printf ("\n\texpresion_prefija -> op_prefijo exp_cast"); } 
     ;
 
 operador_prefijo 
-    : INC                                                                     { printf ("\top_prefijo -> INC\n"); } 
-    | DEC                                                                     { printf ("\top_prefijo -> DEC\n"); } 
-    | '&'                                                                     { printf ("\top_prefijo -> &\n"); } 
-    | '*'                                                                     { printf ("\top_prefijo -> *\n"); } 
-    | '+'                                                                     { printf ("\top_prefijo -> +\n"); }  
-    | '-'                                                                     { printf ("\top_prefijo -> -\n"); } 
-    | '~'                                                                     { printf ("\top_prefijo -> ~\n"); } 
-    | '!'                                                                     { printf ("\top_prefijo -> !\n"); } 
+    : INC                                                                     { printf ("\n\top_prefijo -> INC"); } 
+    | DEC                                                                     { printf ("\n\top_prefijo -> DEC"); } 
+    | '&'                                                                     { printf ("\n\top_prefijo -> &"); } 
+    | '*'                                                                     { printf ("\n\top_prefijo -> *"); } 
+    | '+'                                                                     { printf ("\n\top_prefijo -> +"); }  
+    | '-'                                                                     { printf ("\n\top_prefijo -> -"); } 
+    | '~'                                                                     { printf ("\n\top_prefijo -> ~"); } 
+    | '!'                                                                     { printf ("\n\top_prefijo -> !"); } 
     ;
 
 expresion_cast 
-    : expresion_prefija                                                       { printf ("\texpresion_cast -> exp_prefija\n"); } 
-    | '(' nombre_tipo ')' expresion_prefija                                   { printf ("\texpresion_cast -> ( nom_tipo ) exp_prefija\n"); } 
+    : expresion_prefija                                                       { printf ("\n\texpresion_cast -> exp_prefija"); } 
+    | '(' nombre_tipo ')' expresion_prefija                                   { printf ("\n\texpresion_cast -> ( nom_tipo ) exp_prefija"); } 
+    ;
+
+expresion
+    : expresion_constante                                                     { printf ("\n\texp -> exp_cons"); } 
+    | expresion_parentesis                                                    { printf ("\n\texp -> exp_parentesis"); } 
+    | expresion_funcional                                                     { printf ("\n\texp -> exp_funcional"); } 
+    | expresion_creacion_objeto                                               { printf ("\n\texp -> exp_creacion_objeto"); } 
+    | expresion_indexada                                                      { printf ("\n\texp -> exp_index"); } 
+    | expresion_postfija                                                      { printf ("\n\texp -> exp_posfija"); } 
+    | expresion_prefija                                                       { printf ("\n\texp -> exp_prefija"); } 
+    | expresion_cast                                                          { printf ("\n\texp -> exp_cast"); } 
     ;
 
 %%
 
 void yyerror(char *s) {
   fflush(stdout);
-  printf("Error FATAL %s\n", s);
+  printf("Error FATAL: %s", s);
+  exit(1);
   }
 
 int yywrap() {
@@ -590,10 +591,10 @@ int yywrap() {
 
 int main(int argc, char *argv[]) {
 
-  //yydebug = 0;
+  yydebug = 0;
 
   if (argc < 2) {
-    printf("Uso: ./c-dull NombreArchivo\n");
+    printf("Uso: ./c-dull NombreArchivo");
     }
   else {
     yyin = fopen(argv[1],"r");
