@@ -214,357 +214,364 @@ lista_declaracion_campo
     ;
 
 declaracion_interfaz 
-    : INTERFACE IDENTIFICADOR herencia cuerpo_interfaz
-    | lista_modificador INTERFACE IDENTIFICADOR herencia cuerpo_interfaz
+    : INTERFACE IDENTIFICADOR herencia cuerpo_interfaz                        { printf ("  decl_interfaz -> INTERFACE ID herencia cuerpo_interfaz\n"); }
+    | lista_modificador INTERFACE IDENTIFICADOR herencia cuerpo_interfaz      { printf ("  decl_interfaz -> list_mod INTERFACE ID herencia cuerpo_interfaz\n"); }
     ;
 
 herencia 
-    : ':' nombre_tipo_o_espacio_nombres
+    : ':' nombre_tipo_o_espacio_nombres                                       { printf ("  herencia -> nom_tipo_o_esp_noms\n"); }
     ;
 
 lista_nombre_tipo_o_espacio_nombres 
-    : nombre_tipo_o_espacio_nombres 
-    | lista_nombre_tipo_o_espacio_nombres ',' nombre_tipo_o_espacio_nombres
+    : nombre_tipo_o_espacio_nombres                                           { printf ("  list_nom_tipo_o_esp_noms -> nom_tipo_o_esp_noms\n"); }
+    | lista_nombre_tipo_o_espacio_nombres ',' nombre_tipo_o_espacio_nombres   { printf ("  list_nom_tipo_o_esp_noms -> list_nom_tipo_o_esp_noms nom_tipo_o_esp_noms\n"); }
     ;
 
 cuerpo_interfaz 
-    : '{' '}' 
-    | '{' lista_declaracion_metodo_interfaz '}'
+    : '{' '}'                                                                 { printf ("  cuerpo_interfaz -> { }\n"); }
+    | '{' lista_declaracion_metodo_interfaz '}'                               { printf ("  cuerpo_interfaz -> { list_decl_metodo_inferfaz }\n"); }
     ;
 
 declaracion_metodo_interfaz 
-    : firma_funcion ';' 
-    | NEW firma_funcion ';'
+    : firma_funcion ';'                                                       { printf ("  decl_metodo_inferfaz -> firma_funcion\n"); }
+    | NEW firma_funcion ';'                                                   { printf ("  decl_metodo_inferfaz -> NEW firma_funcion\n"); }
     ;
 
 lista_declaracion_metodo_interfaz 
-    : declaracion_metodo_interfaz 
-    | lista_declaracion_metodo_interfaz declaracion_metodo_interfaz
+    : declaracion_metodo_interfaz                                             { printf ("  list_decl_metodo_inferfaz -> decl_metodo_inferfaz\n"); }
+    | lista_declaracion_metodo_interfaz declaracion_metodo_interfaz           { printf ("  list_decl_metodo_inferfaz -> list_decl_metodo_inferfaz decl_metodo_inferfaz\n"); }
     ;
 
 declaracion_enum 
-    : ENUM IDENTIFICADOR cuerpo_enum
-    | ENUM IDENTIFICADOR ':' tipo_escalar cuerpo_enum
-    | lista_modificador ENUM IDENTIFICADOR cuerpo_enum
-    | lista_modificador ENUM IDENTIFICADOR ':' tipo_escalar cuerpo_enum
+    : ENUM IDENTIFICADOR cuerpo_enum                                          { printf ("  decl_enum -> ENUM ID cuerpo_enum\n"); }
+    | ENUM IDENTIFICADOR ':' tipo_escalar cuerpo_enum                         { printf ("  decl_enum -> ENUM ID tipo_escalar cuerpo_enum\n"); }
+    | lista_modificador ENUM IDENTIFICADOR cuerpo_enum                        { printf ("  decl_enum -> list_mod ENUM ID cuerpo_enum\n"); }
+    | lista_modificador ENUM IDENTIFICADOR ':' tipo_escalar cuerpo_enum       { printf ("  decl_enum -> list_mod ENUM ID tipo_escalar cuerpo_enum\n"); }
     ;
 
 cuerpo_enum 
-    : '{' lista_declaracion_miembro_enum '}'
+    : '{' lista_declaracion_miembro_enum '}'                                  { printf ("  cuerpo_enum -> { list_decl_miembro_enum }\n"); }
     ;
 
 declaracion_miembro_enum 
-    : IDENTIFICADOR 
-    | IDENTIFICADOR '=' expresion
+    : IDENTIFICADOR                                                           { printf ("  decl_miembro_enum -> ID\n"); }
+    | IDENTIFICADOR '=' expresion                                             { printf ("  decl_miembro_enum -> ID = exp\n"); }
     ;
 
 lista_declaracion_miembro_enum 
-    : declaracion_miembro_enum 
-    | lista_declaracion_miembro_enum ',' declaracion_miembro_enum
+    : declaracion_miembro_enum                                                { printf ("  list_decl_miembro_enum -> decl_miembro_enum\n"); }
+    | lista_declaracion_miembro_enum ',' declaracion_miembro_enum             { printf ("  list_decl_miembro_enum -> list_decl_miembro_enum decl_miembro_enum\n"); }
     ;
 
 /**********/
 /* CLASES */
 /**********/
 declaracion_clase 
-    : CLASS IDENTIFICADOR herencia cuerpo_clase 
-    | lista_modificador CLASS IDENTIFICADOR herencia cuerpo_clase
+    : CLASS IDENTIFICADOR herencia cuerpo_clase                               { printf ("  decl_clase -> CLASS ID herencia cuerpo_clase\n"); }     
+    | lista_modificador CLASS IDENTIFICADOR herencia cuerpo_clase             { printf ("  decl_clase -> list_mod CLASS ID herencia cuerpo_clase\n"); }
     ;
 
 cuerpo clase 
-    : '{' lista_declaracion_elemento_clase '}'
+    : '{' lista_declaracion_elemento_clase '}'                                { printf ("  cuerpo_clase -> list_decl_elem_clase\n"); }
     ;
 
 declaracion_elemento_clase 
-    : declaracion_tipo
-    | declaracion_atributo
-    | declaracion_metodo
-    | declaracion_constructor
-    | declaracion_destructor
-    | declaracion_atributo
+    : declaracion_tipo                                                        { printf ("  decl_elem_clase -> decl_tipo\n"); }
+    | declaracion_atributo                                                    { printf ("  decl_elem_clase -> declaracion_atributo\n"); }
+    | declaracion_metodo                                                      { printf ("  decl_elem_clase -> decl_metodo\n"); }
+    | declaracion_constructor                                                 { printf ("  decl_elem_clase -> decl_constructor\n"); }
+    | declaracion_destructor                                                  { printf ("  decl_elem_clase -> decl_destructor\n"); }
+    | declaracion_atributo                                                    { printf ("  decl_elem_clase -> decl_atributo\n"); }
     ;
 
 lista_declaracion_elemento_clase 
-    : declaracion_elemento_clase 
-    | lista_declaracion_elemento_clase declaracion_elemento_clase
+    : declaracion_elemento_clase                                              { printf ("  list_decl_elem_clase -> decl_elem_clase\n"); }
+    | lista_declaracion_elemento_clase declaracion_elemento_clase             { printf ("  list_decl_elem_clase -> list_decl_elem_clase decl_elem_clase\n"); }
     ;
 
 declaracion_atributo 
-    : declaracion_variable 
-    | lista_modificador declaracion_variable
+    : declaracion_variable                                                    { printf ("  decl_atributo -> decl_var\n"); }
+    | lista_modificador declaracion_variable                                  { printf ("  decl_atributo -> list_mod decl_var\n"); }
     ;
 
 declaracion_metodo 
-    : firma_funcion bloque_instrucciones 
-    | lista_modificador firma_funcion bloque_instrucciones
+    : firma_funcion bloque_instrucciones                                      { printf ("  decl_metodo -> firma_funcion bloque_instrucciones\n"); }
+    | lista_modificador firma_funcion bloque_instrucciones                    { printf ("  decl_metodo -> list_mod firma_funcion bloque_instrucciones\n"); }
     ;
 
 declaracion_constructor 
-    : cabecera_constructor bloque_instrucciones 
-    | lista_modificador cabecera_constructor bloque_instrucciones
+    : cabecera_constructor bloque_instrucciones                               { printf ("  decl_constructor -> cabecera_constructor bloque_instrucciones\n"); }
+    | lista_modificador cabecera_constructor bloque_instrucciones             { printf ("  decl_constructor -> list_mod cabecera_constructor bloque_instrucciones\n"); }
     ;
 
 cabecera_constructor 
-    : IDENTIFICADOR 
-    | IDENTIFICADOR parametros inicializador_constructor 
-    | IDENTIFICADOR parametros 
-    | IDENTIFICADOR inicializador_constructor
+    : IDENTIFICADOR                                                           { printf ("  cabecera_constructor -> ID\n"); }
+    | IDENTIFICADOR parametros inicializador_constructor                      { printf ("  cabecera_constructor -> ID parametros inicializador_constructor\n"); }
+    | IDENTIFICADOR parametros                                                { printf ("  cabecera_constructor -> ID parametros\n"); }
+    | IDENTIFICADOR inicializador_constructor                                 { printf ("  cabecera_constructor -> ID inicializador_constructor\n"); }
     ;
 
 inicializador_constructor 
-    : ':' BASE parametros 
-    | ':' THIS parametros
+    : ':' BASE parametros                                                     { printf ("  inicializador_constructor -> BASE parametros\n"); }
+    | ':' THIS parametros                                                     { printf ("  inicializador_constructor -> THIS parametros\n"); }
     ;
 
 declaracion_destructor 
-    : cabecera_destructor bloque_instrucciones 
-    | lista_modificador cabecera_destructor bloque_instrucciones
+    : cabecera_destructor bloque_instrucciones                                { printf ("  decl_destructor -> cabecera_destructor bloque_instrucciones\n"); }
+    | lista_modificador cabecera_destructor bloque_instrucciones              { printf ("  decl_destructor -> list_mod cabecera_destructor bloque_instrucciones\n"); }
     ;
 
 cabecera_destructor 
-    : '~' IDENTIFICADOR '(' ')'
+    : '~' IDENTIFICADOR '(' ')'                                               { printf ("  cabecera_destructor -> ~ ID ()\n"); }
     ;
 
 /*************/
 /* FUNCIONES */
 /*************/
 declaracion_funcion 
-    : firma_funcion bloque_instrucciones
+    : firma_funcion bloque_instrucciones                                      { printf ("  decl_func -> firma_funcion bloque_instrucciones\n"); }
     ;
 
 firma_funcion 
-    : VOID IDENTIFICADOR parametros 
-    | tipo IDENTIFICADOR parametros 
-    | tipo lista_asterisco IDENTIFICADOR parametros
+    : VOID IDENTIFICADOR parametros                                           { printf ("  firma_funcion -> VOID ID parametros\n"); }
+    | tipo IDENTIFICADOR parametros                                           { printf ("  firma_funcion -> tipo ID parametros\n"); }
+    | tipo lista_asterisco IDENTIFICADOR parametros                           { printf ("  firma_funcion -> tipo list_asterisco ID parametros\n"); }
     ;
 
 lista_asterisco
-    : '*' 
-    | lista_asterisco '*'
+    : '*'                                                                     { printf ("  list_asterisco -> *\n"); } 
+    | lista_asterisco '*'                                                     { printf ("  list_asterisco -> list_asterisco *\n"); }
     ;
 
 parametros 
-    : '(' ')' 
-    | '(' lista_argumentos ')'
+    : '(' ')'                                                                 { printf ("  parametros -> ()\n"); }
+    | '(' lista_argumentos ')'                                                { printf ("  parametros -> ( list_argumentos )\n"); }
     ;
 
 argumentos 
-    : nombre_tipo lista_variable
+    : nombre_tipo lista_variable                                              { printf ("  argumentos -> nom_tipo list_var\n"); }
     ;
 
 lista_argumentos 
-    : argumentos 
-    | lista_argumentos ';' argumentos
+    : argumentos                                                              { printf ("  list_argumentos -> argumentos\n"); }
+    | lista_argumentos ';' argumentos                                         { printf ("  list_argumentos -> list_argumentos argumentos\n"); }
     ;
 
 nombre_tipo 
-    : tipo 
-    | tipo lista_asterisco
+    : tipo                                                                    { printf ("  nom_tipo -> tipo\n"); }
+    | tipo lista_asterisco                                                    { printf ("  nom_tipo -> tipo list_asterisco\n"); }
     ;
 
 variable
-    : IDENTIFICADOR 
-    | IDENTIFICADOR '=' expresion
+    : IDENTIFICADOR                                                           { printf ("  var -> ID\n"); }
+    | IDENTIFICADOR '=' expresion                                             { printf ("  var -> ID = exp\n"); }
     ;
 
 lista_variable 
-    : variable 
-    | lista_variable ',' variable
+    : variable                                                                { printf ("  list_var -> var\n"); }
+    | lista_variable ',' variable                                             { printf ("  list_var -> list_var var\n"); }
     ;
 
 /*****************/
 /* INSTRUCCIONES */
 /*****************/
 instruccion 
-    : bloque_instrucciones
-    | instruccion_expresion
-    | instruccion_bifurcacion
-    | instruccion_bucle
-    | instruccion_salto
-    | instruccion_destino_salto
-    | instruccion_retorno
-    | instruccion_lanzamiento_excepcion
-    | instruccion_captura_excepcion
-    | instruccion_vacia
+    : bloque_instrucciones                                                    { printf ("  instruccion -> bloque_instrucciones\n"); }
+    | instruccion_expresion                                                   { printf ("  instruccion -> instruccion_exp\n"); }
+    | instruccion_bifurcacion                                                 { printf ("  instruccion -> instruccion_bifurcacion\n"); }
+    | instruccion_bucle                                                       { printf ("  instruccion -> instruccion_bucle\n"); }
+    | instruccion_salto                                                       { printf ("  instruccion -> instruccion_salto\n"); }
+    | instruccion_destino_salto                                               { printf ("  instruccion -> instruccion_destino_salto\n"); }
+    | instruccion_retorno                                                     { printf ("  instruccion -> instruccion_retorno\n"); }
+    | instruccion_lanzamiento_excepcion                                       { printf ("  instruccion -> instruccion_lanzamiento_excepcion\n"); }
+    | instruccion_captura_excepcion                                           { printf ("  instruccion -> instruccion_captura_excepcion\n"); }
+    | instruccion_vacia                                                       { printf ("  instruccion -> instruccion_vacia\n"); }
     ;
 
 lista_instruccion 
-    : instruccion 
-    | lista_instruccion instruccion
+    : instruccion                                                             { printf ("  list_instruccion -> instruccion\n"); }
+    | lista_instruccion instruccion                                           { printf ("  list_instruccion -> list_instruccion instruccion\n"); }
     ;
 
 bloque_instrucciones 
-    : '{' '}' 
-    | '{' lista_declaracion '}' 
-    | '{' lista_instruccion '}' 
-    | '{' lista_declaracion lista_instruccion '}'
+    : '{' '}'                                                                 { printf ("  bloque_instrucciones -> {}\n"); }
+    | '{' lista_declaracion '}'                                               { printf ("  bloque_instrucciones -> { list_decl }\n"); }
+    | '{' lista_instruccion '}'                                               { printf ("  bloque_instrucciones -> { list_instruccion }\n"); }
+    | '{' lista_declaracion lista_instruccion '}'                             { printf ("  bloque_instrucciones -> { list_decl list_instruccion }\n"); }
     ;
 
 instruccion_expresion 
-    : expresion_funcional ';' 
-    | asignacion ';'
+    : expresion_funcional ';'                                                 { printf ("  instruccion_expresion -> exp_funcional\n"); }
+    | asignacion ';'                                                          { printf ("  instruccion_expresion -> asignacion\n"); }
     ;
 
 asignacion 
-    : expresion_indexada operador_asignacion expresion
+    : expresion_indexada operador_asignacion expresion                        { printf ("  asignacion -> exp_index op_asignacion exp\n"); }
     ;
+//
 
+
+
+
+
+
+    //thiss
 operador_asignacion 
-    : '=' 
-    | '*=' 
-    | '/=' 
-    | '%=' 
-    | '+=' 
-    | '-=' 
-    | '<<=' 
-    | '>>=' 
-    | '&=' 
-    | '^=' 
-    | '|='
+    : '='                                                                     { printf ("  op_asignacion -> instruccion\n"); }
+    | '*='                                                                    { printf ("  op_asignacion -> instruccion\n"); }
+    | '/='                                                                    { printf ("  op_asignacion -> instruccion\n"); }
+    | '%='                                                                    { printf ("  op_asignacion -> instruccion\n"); }
+    | '+='                                                                    { printf ("  op_asignacion -> instruccion\n"); }
+    | '-='                                                                    { printf ("  op_asignacion -> instruccion\n"); }
+    | '<<='                                                                   { printf ("  op_asignacion -> instruccion\n"); }
+    | '>>='                                                                   { printf ("  op_asignacion -> instruccion\n"); }
+    | '&='                                                                    { printf ("  op_asignacion -> instruccion\n"); }
+    | '^='                                                                    { printf ("  op_asignacion -> instruccion\n"); }
+    | '|='                                                                    { printf ("  op_asignacion -> instruccion\n"); }
     ;
 
 instruccion_bifurcacion 
-    : IF '(' expresion ')' instruccion 
-    | IF '(' expresion ')' instruccion ELSE instruccion 
-    | SWITCH '(' expresion ')' '{' lista_instruccion_caso '}'
+    : IF '(' expresion ')' instruccion                                        { printf ("  instruccion_bifurcacion -> IF ( exp ) instruccion\n"); }
+    | IF '(' expresion ')' instruccion ELSE instruccion                       { printf ("  instruccion_bifurcacion -> IF ( exp ) instruccion ELSE instruccion\n"); }
+    | SWITCH '(' expresion ')' '{' lista_instruccion_caso '}'                 { printf ("  instruccion_bifurcacion -> SWITCH ( exp ) { list_instruccion_caso }\n"); }
     ;
 
 instruccion_caso 
-    : CASE expresion ':' instruccion 
-    | DEFAULT ':' instruccion
+    : CASE expresion ':' instruccion                                          { printf ("  instruccion_caso -> CASE exp instruccion\n"); }
+    | DEFAULT ':' instruccion                                                 { printf ("  instruccion_caso -> DEFAULT instruccion\n"); }
     ;
 
 lista_instruccion_caso
-    : instruccion_caso 
-    | lista_instruccion_caso instruccion_caso
+    : instruccion_caso                                                        { printf ("  list_instruccion_caso -> instruccion_caso\n"); }
+    | lista_instruccion_caso instruccion_caso                                 { printf ("  list_instruccion_caso -> list_instruccion_caso instruccion_caso\n"); }
     ;
 
 instruccion_bucle 
-    : WHILE '(' expresion ')' instruccion 
-    | DO instruccion WHILE '(' expresion ')' ';'
-    | FOR '(' ';' expresion ';' lista_expresion ')' instruccion
-    | FOR '(' lista_asignacion ';' expresion ';' lista_expresion ')' instruccion
+    : WHILE '(' expresion ')' instruccion                                     { printf ("  instruccion_bucle -> WHILE ( exp ) instruccion\n"); } 
+    | DO instruccion WHILE '(' expresion ')' ';'                              { printf ("  instruccion_bucle -> DO instruccion WHILE ( exp )\n"); } 
+    | FOR '(' ';' expresion ';' lista_expresion ')' instruccion               { printf ("  instruccion_bucle -> FOR ( exp list_exp ) instruccion\n"); } 
+    | FOR '(' lista_asignacion ';' expresion ';' lista_expresion ')' instruccion { printf ("  instruccion_bucle -> FOR ( list_asignacion exp list_exp ) instruccion\n"); } 
     ;
 
 lista_asignacion 
-    : asignacion 
-    | lista_asignacion asignacion
+    : asignacion                                                              { printf ("  list_asignacion -> asignacion\n"); } 
+    | lista_asignacion asignacion                                             { printf ("  list_asignacion -> list_asignacion asignacion\n"); } 
     ;
 
 instruccion_salto 
-    : GOTO IDENTIFICADOR ';' 
-    | CONTINUE ';' 
-    | BREAK ';'
+    : GOTO IDENTIFICADOR ';'                                                  { printf ("  instruccion_salto -> GOTO ID\n"); } 
+    | CONTINUE ';'                                                            { printf ("  instruccion_salto -> CONTINUE\n"); } 
+    | BREAK ';'                                                               { printf ("  instruccion_salto -> BREAK\n"); } 
     ;
 
 instruccion_destino_salto 
-    : IDENTIFICADOR ':' instruccion ';'
+    : IDENTIFICADOR ':' instruccion ';'                                       { printf ("  instruccion_destino_salto -> ID instruccion\n"); } 
     ;
 
 instruccion_retorno 
-    : RETURN ';' 
-    | RETURN expresion ';'
+    : RETURN ';'                                                              { printf ("  instruccion_retorno -> RETURN\n"); } 
+    | RETURN expresion ';'                                                    { printf ("  instruccion_retorno -> RETURN exp\n"); } 
     ;
 
 instruccion_lanzamiento_excepcion 
-    : THROW expresion ';'
+    : THROW expresion ';'                                                     { printf ("  instruccion_lanzamiento_excepcion -> THROW exp\n"); } 
     ;
 
 instruccion_captura_excepcion 
-    : TRY bloque_instrucciones clausulas-catch
-    | TRY bloque_instrucciones clausula_finally
-    | TRY bloque_instrucciones clausulas-catch clausula_finally
+    : TRY bloque_instrucciones clausulas-catch                                { printf ("  instruccion_captura_excepcion -> TRY  bloque_instrucciones clausulas-catch\n"); } 
+    | TRY bloque_instrucciones clausula_finally                               { printf ("  instruccion_captura_excepcion -> TRY  bloque_instrucciones clausula_finally\n"); } 
+    | TRY bloque_instrucciones clausulas-catch clausula_finally               { printf ("  instruccion_captura_excepcion -> TRY  bloque_instrucciones clausulas-catch clausula_finally\n"); } 
     ;
 
 clausulas-catch 
-    : lista_clausula_catch_especifica 
-    | clausula_catch_general 
-    | lista_clausula_catch_especifica clausula_catch_general
+    : lista_clausula_catch_especifica                                         { printf ("  clausulas-catch -> list_clausula_catch_especifica\n"); } 
+    | clausula_catch_general                                                  { printf ("  clausulas-catch -> clausula_catch_general\n"); } 
+    | lista_clausula_catch_especifica clausula_catch_general                  { printf ("  clausulas-catch -> list_clausula_catch_especifica clausula_catch_general\n"); } 
     ;
 
 clausula_catch_especifica 
-    : CATCH '(' nombre_tipo ')' bloque_instrucciones
+    : CATCH '(' nombre_tipo ')' bloque_instrucciones                          { printf ("  clausula_catch_especifica -> CATCH '(' nom_tipo ')' bloque_instrucciones\n"); } 
     ;
 
 lista_clausula_catch_especifica 
-    : lista_clausula_catch_especifica clausula_catch_especifica
+    : lista_clausula_catch_especifica clausula_catch_especifica               { printf ("  list_clausula_catch_especifica -> list_clausula_catch_especifica clausula_catch_especifica\n"); } 
     ;
 
 clausula_catch_general 
-    : CATCH bloque_instrucciones
+    : CATCH bloque_instrucciones                                              { printf ("  clausula_catch_general -> CATCH bloque_instrucciones\n"); } 
     ;
 
 clausula-finally 
-    : FINALLY bloque_instrucciones
+    : FINALLY bloque_instrucciones                                            { printf ("  clausula-finally -> FINALLY bloque_instrucciones\n"); } 
     ;
 
 instruccion_retorno 
-    : RETURN ';' 
-    | RETURN expresion ';'
+    : RETURN ';'                                                              { printf ("  instruccion_retorno -> RETURN\n"); } 
+    | RETURN expresion ';'                                                    { printf ("  instruccion_retorno -> RETURN exp\n"); } 
     ;
 
 /***************/
 /* EXPRESIONES */
 /***************/
 expresion_constante 
-    : ENTERO 
-    | REAL 
-    | CADENA 
-    | CARACTER 
-    | BOOLEANO
+    : ENTERO                                                                  { printf ("  expresion_constante -> ENTERO\n"); } 
+    | REAL                                                                    { printf ("  expresion_constante -> REAL\n"); } 
+    | CADENA                                                                  { printf ("  expresion_constante -> CADENA\n"); } 
+    | CARACTER                                                                { printf ("  expresion_constante -> CARACTER\n"); } 
+    | BOOLEANO                                                                { printf ("  expresion_constante -> BOOLEANO\n"); } 
     ;
 
 expresion_parentesis 
-    : '(' expresion ')'
+    : '(' expresion ')'                                                       { printf ("  expresion_parentesis -> ( exp )\n"); } 
     ;
 
 expresion_funcional 
-    : identificador_anidado '(' ')' 
-    | identificador_anidado '(' lista_expresion ')'
+    : identificador_anidado '(' ')'                                           { printf ("  expresion_funcional -> id_anid ()\n"); } 
+    | identificador_anidado '(' lista_expresion ')'                           { printf ("  expresion_funcional -> id_anid ( list_exp )\n"); } 
     ;
 
 expresion_creacion_objeto 
-    : NEW identificador_anidado '(' ')' 
-    | NEW identificador_anidado '(' lista_expresion ')'
+    : NEW identificador_anidado '(' ')'                                       { printf ("  expresion_creacion_objeto -> NEW id_anid ()\n"); } 
+    | NEW identificador_anidado '(' lista_expresion ')'                       { printf ("  expresion_creacion_objeto -> NEW id_anid ( list_exp )\n"); } 
     ;
 
 expresion_indexada 
-    : identificador_anidado
-    | expresion_indexada '[' expresion ']'
-    | expresion_indexada '->' identificador_anidado
+    : identificador_anidado                                                   { printf ("  expresion_indexada -> id_anid\n"); } 
+    | expresion_indexada '[' expresion ']'                                    { printf ("  expresion_indexada -> exp_index [ exp ]\n"); } 
+    | expresion_indexada '->' identificador_anidado                           { printf ("  expresion_indexada -> exp_index -> id_anid\n"); } 
     ;
 
 expresion_postfija 
-    : expresion_constante
-    | expresion_parentesis
-    | expresion_funcional
-    | expresion_creacion_objeto
-    | expresion_indexada
-    | expresion_postfija INC
-    | expresion_postfija DEC
+    : expresion_constante                                                     { printf ("  expresion_postfija -> exp_cons\n"); } 
+    | expresion_parentesis                                                    { printf ("  expresion_postfija -> exp_parentesis\n"); } 
+    | expresion_funcional                                                     { printf ("  expresion_postfija -> exp_funcional\n"); } 
+    | expresion_creacion_objeto                                               { printf ("  expresion_postfija -> exp_creacion_objeto\n"); } 
+    | expresion_indexada                                                      { printf ("  expresion_postfija -> exp_index\n"); } 
+    | expresion_postfija INC                                                  { printf ("  expresion_postfija -> exp_postfija INC\n"); } 
+    | expresion_postfija DEC                                                  { printf ("  expresion_postfija -> exp_posfija DEC\n"); } 
     ;
 
 expresion_prefija 
-    : expresion_postfija
-    | SIZEOF expresion_prefija
-    | SIZEOF '(' nombre_tipo ')'
-    | operador_prefijo expresion_cast
+    : expresion_postfija                                                      { printf ("  expresion_prefija -> exp_posfija\n"); } 
+    | SIZEOF expresion_prefija                                                { printf ("  expresion_prefija -> SIZEOF exp_prefija\n"); } 
+    | SIZEOF '(' nombre_tipo ')'                                              { printf ("  expresion_prefija -> SIZEOF ( nom_tipo )\n"); } 
+    | operador_prefijo expresion_cast                                         { printf ("  expresion_prefija -> op_prefijo exp_cast\n"); } 
     ;
 
 operador_prefijo 
-    : INC 
-    | DEC 
-    | '&' 
-    | '*' 
-    | '+' 
-    | '-' 
-    | '~' 
-    | '!'
+    : INC                                                                     { printf ("  op_prefijo -> INC\n"); } 
+    | DEC                                                                     { printf ("  op_prefijo -> DEC\n"); } 
+    | '&'                                                                     { printf ("  op_prefijo -> &\n"); } 
+    | '*'                                                                     { printf ("  op_prefijo -> *\n"); } 
+    | '+'                                                                     { printf ("  op_prefijo -> +\n"); }  
+    | '-'                                                                     { printf ("  op_prefijo -> -\n"); } 
+    | '~'                                                                     { printf ("  op_prefijo -> ~\n"); } 
+    | '!'                                                                     { printf ("  op_prefijo -> !\n"); } 
     ;
 
 expresion_cast 
-    : expresion_prefija 
-    | '(' nombre_tipo ')' expresion_prefija
+    : expresion_prefija                                                       { printf ("  expresion_cast -> exp_prefija\n"); } 
+    | '(' nombre_tipo ')' expresion_prefija                                   { printf ("  expresion_cast -> ( nom_tipo ) exp_prefija\n"); } 
     ;
 
 %%
