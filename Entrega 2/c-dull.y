@@ -217,6 +217,7 @@ declaracion_interfaz
 
 herencia 
     : ':' nombre_tipo_o_espacio_nombres                                       { printf ("\n\therencia -> nom_tipo_o_esp_noms"); }
+    |                                                                         { printf ("\n\therencia"); }
     ;
 
 lista_nombre_tipo_o_espacio_nombres 
@@ -508,48 +509,48 @@ instruccion_vacia
 /***************/
 
 expresion_constante 
-    : ENTERO                                                                  { printf ("\n\texpresion_constante -> ENTERO"); } 
-    | REAL                                                                    { printf ("\n\texpresion_constante -> REAL"); } 
-    | CADENA                                                                  { printf ("\n\texpresion_constante -> CADENA"); } 
-    | CARACTER                                                                { printf ("\n\texpresion_constante -> CARACTER"); } 
-    | BOOLEANO                                                                { printf ("\n\texpresion_constante -> BOOLEANO"); } 
+    : ENTERO                                                                  { printf ("\n\texp_constante -> ENTERO"); } 
+    | REAL                                                                    { printf ("\n\texp_constante -> REAL"); } 
+    | CADENA                                                                  { printf ("\n\texp_constante -> CADENA"); } 
+    | CARACTER                                                                { printf ("\n\texp_constante -> CARACTER"); } 
+    | BOOLEANO                                                                { printf ("\n\texp_constante -> BOOLEANO"); } 
     ;
 
 expresion_parentesis 
-    : '(' expresion ')'                                                       { printf ("\n\texpresion_parentesis -> ( exp )"); } 
+    : '(' expresion ')'                                                       { printf ("\n\texp_parentesis -> ( exp )"); } 
     ;
 
 expresion_funcional 
-    : identificador_anidado '(' ')'                                           { printf ("\n\texpresion_funcional -> id_anid ()"); } 
-    | identificador_anidado '(' lista_expresion ')'                           { printf ("\n\texpresion_funcional -> id_anid ( list_exp )"); } 
+    : identificador_anidado '(' ')'                                           { printf ("\n\texp_funcional -> id_anid ()"); } 
+    | identificador_anidado '(' lista_expresion ')'                           { printf ("\n\texp_funcional -> id_anid ( list_exp )"); } 
     ;
 
 expresion_creacion_objeto 
-    : NEW identificador_anidado '(' ')'                                       { printf ("\n\texpresion_creacion_objeto -> NEW id_anid ()"); } 
-    | NEW identificador_anidado '(' lista_expresion ')'                       { printf ("\n\texpresion_creacion_objeto -> NEW id_anid ( list_exp )"); } 
+    : NEW identificador_anidado '(' ')'                                       { printf ("\n\texp_creacion_objeto -> NEW id_anid ()"); } 
+    | NEW identificador_anidado '(' lista_expresion ')'                       { printf ("\n\texp_creacion_objeto -> NEW id_anid ( list_exp )"); } 
     ;
 
 expresion_indexada 
-    : identificador_anidado                                                   { printf ("\n\texpresion_indexada -> id_anid"); } 
-    | expresion_indexada '[' expresion ']'                                    { printf ("\n\texpresion_indexada -> exp_index [ exp ]"); } 
-    | expresion_indexada PTR_ACCESO identificador_anidado                     { printf ("\n\texpresion_indexada -> exp_index -> id_anid"); } 
+    : identificador_anidado                                                   { printf ("\n\texp_indexada -> id_anid"); } 
+    | expresion_indexada '[' expresion ']'                                    { printf ("\n\texp_indexada -> exp_index [ exp ]"); } 
+    | expresion_indexada PTR_ACCESO identificador_anidado                     { printf ("\n\texp_indexada -> exp_index -> id_anid"); } 
     ;
 
 expresion_postfija 
-    : expresion_constante                                                     { printf ("\n\texpresion_postfija -> exp_cons"); } 
-    | expresion_parentesis                                                    { printf ("\n\texpresion_postfija -> exp_parentesis"); } 
-    | expresion_funcional                                                     { printf ("\n\texpresion_postfija -> exp_funcional"); } 
-    | expresion_creacion_objeto                                               { printf ("\n\texpresion_postfija -> exp_creacion_objeto"); } 
-    | expresion_indexada                                                      { printf ("\n\texpresion_postfija -> exp_index"); } 
-    | expresion_postfija INC                                                  { printf ("\n\texpresion_postfija -> exp_postfija INC"); } 
-    | expresion_postfija DEC                                                  { printf ("\n\texpresion_postfija -> exp_posfija DEC"); } 
+    : expresion_constante                                                     { printf ("\n\texp_postfija -> exp_cons"); } 
+    | expresion_parentesis                                                    { printf ("\n\texp_postfija -> exp_parentesis"); } 
+    | expresion_funcional                                                     { printf ("\n\texp_postfija -> exp_funcional"); } 
+    | expresion_creacion_objeto                                               { printf ("\n\texp_postfija -> exp_creacion_objeto"); } 
+    | expresion_indexada                                                      { printf ("\n\texp_postfija -> exp_index"); } 
+    | expresion_postfija INC                                                  { printf ("\n\texp_postfija -> exp_postfija INC"); } 
+    | expresion_postfija DEC                                                  { printf ("\n\texp_postfija -> exp_posfija DEC"); } 
     ;
 
 expresion_prefija 
-    : expresion_postfija                                                      { printf ("\n\texpresion_prefija -> exp_posfija"); } 
-    | SIZEOF expresion_prefija                                                { printf ("\n\texpresion_prefija -> SIZEOF exp_prefija"); } 
-    | SIZEOF '(' nombre_tipo ')'                                              { printf ("\n\texpresion_prefija -> SIZEOF ( nom_tipo )"); } 
-    | operador_prefijo expresion_cast                                         { printf ("\n\texpresion_prefija -> op_prefijo exp_cast"); } 
+    : expresion_postfija                                                      { printf ("\n\texp_prefija -> exp_posfija"); } 
+    | SIZEOF expresion_prefija                                                { printf ("\n\texp_prefija -> SIZEOF exp_prefija"); } 
+    | SIZEOF '(' nombre_tipo ')'                                              { printf ("\n\texp_prefija -> SIZEOF ( nom_tipo )"); } 
+    | operador_prefijo expresion_cast                                         { printf ("\n\texp_prefija -> op_prefijo exp_cast"); } 
     ;
 
 operador_prefijo 
@@ -564,8 +565,8 @@ operador_prefijo
     ;
 
 expresion_cast 
-    : expresion_prefija                                                       { printf ("\n\texpresion_cast -> exp_prefija"); } 
-    | '(' nombre_tipo ')' expresion_prefija                                   { printf ("\n\texpresion_cast -> ( nom_tipo ) exp_prefija"); } 
+    : expresion_prefija                                                       { printf ("\n\texp_cast -> exp_prefija"); } 
+    | '(' nombre_tipo ')' expresion_prefija                                   { printf ("\n\texp_cast -> ( nom_tipo ) exp_prefija"); } 
     ;
 
 expresion
@@ -577,6 +578,65 @@ expresion
     | expresion_postfija                                                      { printf ("\n\texp -> exp_posfija"); } 
     | expresion_prefija                                                       { printf ("\n\texp -> exp_prefija"); } 
     | expresion_cast                                                          { printf ("\n\texp -> exp_cast"); } 
+    | expresion_logica                                                        { printf ("\n\texp -> exp_logica"); }
+    | expresion_logica '?' expresion ':' expresion                            { printf ("\n\texp -> exp_logica ? exp : exp"); }
+    ;
+
+expresion_logica 
+    : expresion_logica OR expresion_logica1                                   { printf ("\n\texp_logica -> exp_logica OR exp_logica1"); }
+    | expresion_logica1                                                       { printf ("\n\texp_logica -> exp_logica1 "); }
+    ;
+
+expresion_logica1
+    : expresion_logica1 AND expresion_logica2                                 { printf ("\n\texp_logica1 -> exp_logica1 AND exp_logica2"); }
+    | expresion_logica2                                                       { printf ("\n\texp_logica1 -> exp_logica2 "); }
+    ;
+
+expresion_logica2
+    : expresion_logica2 EQ expresion_logica3                                  { printf ("\n\texp_logica2 -> exp_logica2 EQ exp_logica3"); }
+    | expresion_logica2 NEQ expresion_logica3                                 { printf ("\n\texp_logica2 -> exp_logica2 NEQ exp_logica3"); }
+    | expresion_logica3
+    ;
+
+expresion_logica3
+    : expresion_logica3 '<' expresion_logica4                                 { printf ("\n\texp_logica3 -> exp_logica3 < exp_logica4"); }
+    | expresion_logica3 '>' expresion_logica4                                 { printf ("\n\texp_logica3 -> exp_logica3 > exp_logica4"); }
+    | expresion_logica3 GE expresion_logica4                                  { printf ("\n\texp_logica3 -> exp_logica3 GE exp_logica4"); }
+    | expresion_logica3 LE expresion_logica4                                  { printf ("\n\texp_logica3 -> exp_logica3 LE exp_logica4"); }
+    | expresion_logica4
+    ;
+
+expresion_logica4
+    : expresion_logica4 '|' expresion_logica5                                 { printf("\n\texp_logica4 -> exp_logica4 | exp_logica5"); }
+    | expresion_logica5                                                       { printf("\n\texp_logica4 -> exp_logica5 "); }
+    ;
+
+expresion_logica5
+    : expresion_logica5 '^' expresion_logica6                                 { printf ("\n\texp_logica5 -> exp_logica5 '^' exp_logica6"); }
+    | expresion_logica6                                                       { printf ("\n\texp_logica5 -> exp_logica6 "); }
+    ;
+
+expresion_logica6
+    : expresion_logica6 '&' expresion_logica7                                 { printf (" exp_logica6 -> exp_logica7 & exp_logica6"); }
+    | expresion_logica7                                                       { printf (" exp_logica6 -> exp_logica7 "); }
+    ;
+
+expresion_logica7
+    : expresion_logica7 DESPI expresion_logica8                               { printf (" exp_logica7 -> exp_logica7 DESPI exp_logica8"); }
+    | expresion_logica7 DESPD expresion_logica8                               { printf (" exp_logica7 -> exp_logica7 DESPD exp_logica8"); }
+    | expresion_logica8                                                       { printf (" exp_logica7 -> exp_logica8 "); }
+    ;
+
+expresion_logica8
+    : expresion_logica8 '+' expresion_logica9                                 { printf (" exp_logica8 -> exp_logica8 + exp_logica9"); }
+    | expresion_logica8 '-' expresion_logica9                                 { printf (" exp_logica8 -> exp_logica8 - exp_logica9"); }
+    | expresion_logica9                                                       { printf (" exp_logica8 -> exp_logica9"); }
+    ;
+expresion_logica9
+    : expresion_logica9 '*' expresion_cast                                    { printf (" exp_logica9 -> exp_logica9 * exp_cast"); }
+    | expresion_logica9 '/' expresion_cast                                    { printf (" exp_logica9 -> exp_logica9 / exp_cast"); }
+    | expresion_logica9 '%' expresion_cast                                    { printf (" exp_logica9 -> exp_logica9 % exp_cast"); }
+    | expresion_cast                                                          { printf (" exp_logica9 -> exp_cast"); }
     ;
 
 %%
