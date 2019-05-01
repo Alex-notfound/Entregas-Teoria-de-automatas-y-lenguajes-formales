@@ -22,13 +22,13 @@
 /************/
 
 modulo
-    : lista_declaraciones                                                     { printf ("  modulo -> list_decl\n"); }
-    | lista_directivas_uso lista_declaraciones                                { printf ("  modulo -> lista_dir_uso list_decl\n"); }
+    : lista_declaracion                                                       { printf ("  modulo -> list_decl\n"); }
+    | lista_directivas_uso lista_declaracion                                  { printf ("  modulo -> lista_dir_uso list_decl\n"); }
     ;
 
-lista_declaraciones
+lista_declaracion
     : declaracion                                                             { printf ("  list_decl -> decl\n"); }
-    | lista_declaraciones declaracion                                         { printf ("  list_decl -> list_decl decl\n"); }
+    | lista_declaracion declaracion                                           { printf ("  list_decl -> list_decl decl\n"); }
     ;
 
 declaracion
@@ -77,7 +77,7 @@ identificador_anidado
 
 bloque_espacio_nombres 
     : '{' lista_declaracion '}'                                               { printf ("  bloq_esp_noms -> { list_decl }\n"); } 
-    | '{' lista_directiva_uso lista_declaracion '}'                           { printf ("  bloq_esp_noms -> { lista_dir_uso list_decl }\n"); }
+    | '{' lista_directivas_uso lista_declaracion '}'                           { printf ("  bloq_esp_noms -> { lista_dir_uso list_decl }\n"); }
     ;
 
 /*************/
@@ -165,7 +165,7 @@ declaracion_tipo
     ;
 
 nombramiento_tipo 
-    : TYPEDEF tipo ID ';'                                                     { printf ("  nombramiento_tipo -> TYPEDEF tipo ID\n"); }
+    : TYPEDEF tipo IDENTIFICADOR ';'                                          { printf ("  nombramiento_tipo -> TYPEDEF tipo ID\n"); }
     ;
 
 declaracion_struct_union 
@@ -271,7 +271,7 @@ declaracion_clase
     | lista_modificador CLASS IDENTIFICADOR herencia cuerpo_clase             { printf ("  decl_clase -> list_mod CLASS ID herencia cuerpo_clase\n"); }
     ;
 
-cuerpo clase 
+cuerpo_clase 
     : '{' lista_declaracion_elemento_clase '}'                                { printf ("  cuerpo_clase -> list_decl_elem_clase\n"); }
     ;
 
@@ -408,26 +408,19 @@ instruccion_expresion
 asignacion 
     : expresion_indexada operador_asignacion expresion                        { printf ("  asignacion -> exp_index op_asignacion exp\n"); }
     ;
-//
 
-
-
-
-
-
-    //thiss
 operador_asignacion 
-    : '='                                                                     { printf ("  op_asignacion -> instruccion\n"); }
-    | '*='                                                                    { printf ("  op_asignacion -> instruccion\n"); }
-    | '/='                                                                    { printf ("  op_asignacion -> instruccion\n"); }
-    | '%='                                                                    { printf ("  op_asignacion -> instruccion\n"); }
-    | '+='                                                                    { printf ("  op_asignacion -> instruccion\n"); }
-    | '-='                                                                    { printf ("  op_asignacion -> instruccion\n"); }
-    | '<<='                                                                   { printf ("  op_asignacion -> instruccion\n"); }
-    | '>>='                                                                   { printf ("  op_asignacion -> instruccion\n"); }
-    | '&='                                                                    { printf ("  op_asignacion -> instruccion\n"); }
-    | '^='                                                                    { printf ("  op_asignacion -> instruccion\n"); }
-    | '|='                                                                    { printf ("  op_asignacion -> instruccion\n"); }
+    : '='                                                                     { printf ("  op_asignacion -> =\n"); }
+    | MULT_ASIG                                                               { printf ("  op_asignacion -> MULT_ASIG\n"); }
+    | DIV_ASIG                                                                { printf ("  op_asignacion -> DIV_ASIG\n"); }
+    | MOD_ASIG                                                                { printf ("  op_asignacion -> MOD_ASIG\n"); }
+    | SUMA_ASIG                                                               { printf ("  op_asignacion -> SUMA_ASIG\n"); }
+    | RESTA_ASIG                                                              { printf ("  op_asignacion -> RESTA_ASIG\n"); }
+    | DESPI_ASIG                                                              { printf ("  op_asignacion -> DESPI_ASIG\n"); }
+    | DESPD_ASIG                                                              { printf ("  op_asignacion -> DESPD_ASIG\n"); }
+    | AND_ASIG                                                                { printf ("  op_asignacion -> AND_ASIG\n"); }
+    | XOR_ASIG                                                                { printf ("  op_asignacion -> XOR_ASIG\n"); }
+    | OR_ASIG                                                                 { printf ("  op_asignacion -> OR_ASIG\n"); }
     ;
 
 instruccion_bifurcacion 
@@ -501,8 +494,8 @@ clausula_catch_general
     : CATCH bloque_instrucciones                                              { printf ("  clausula_catch_general -> CATCH bloque_instrucciones\n"); } 
     ;
 
-clausula-finally 
-    : FINALLY bloque_instrucciones                                            { printf ("  clausula-finally -> FINALLY bloque_instrucciones\n"); } 
+clausula_finally 
+    : FINALLY bloque_instrucciones                                            { printf ("  clausula_finally -> FINALLY bloque_instrucciones\n"); } 
     ;
 
 instruccion_retorno 
@@ -510,9 +503,24 @@ instruccion_retorno
     | RETURN expresion ';'                                                    { printf ("  instruccion_retorno -> RETURN exp\n"); } 
     ;
 
+instruccion_vacia
+    : ';'                                                                     { printf ("  instruccion_vacia -> ;\n"); } 
+    ;
 /***************/
 /* EXPRESIONES */
 /***************/
+
+expresion
+    : expresion_constante                                                     { printf ("  exp -> exp_cons\n"); } 
+    | expresion_parentesis                                                    { printf ("  exp -> exp_parentesis\n"); } 
+    | expresion_funcional                                                     { printf ("  exp -> exp_funcional\n"); } 
+    | expresion_creacion_objeto                                               { printf ("  exp -> exp_creacion_objeto\n"); } 
+    | expresion_indexada                                                      { printf ("  exp -> exp_index\n"); } 
+    | expresion_postfija                                                      { printf ("  exp -> exp_posfija\n"); } 
+    | expresion_prefija                                                       { printf ("  exp -> exp_prefija\n"); } 
+    | expresion_cast                                                          { printf ("  exp -> exp_cast\n"); } 
+    ;
+
 expresion_constante 
     : ENTERO                                                                  { printf ("  expresion_constante -> ENTERO\n"); } 
     | REAL                                                                    { printf ("  expresion_constante -> REAL\n"); } 
@@ -538,7 +546,7 @@ expresion_creacion_objeto
 expresion_indexada 
     : identificador_anidado                                                   { printf ("  expresion_indexada -> id_anid\n"); } 
     | expresion_indexada '[' expresion ']'                                    { printf ("  expresion_indexada -> exp_index [ exp ]\n"); } 
-    | expresion_indexada '->' identificador_anidado                           { printf ("  expresion_indexada -> exp_index -> id_anid\n"); } 
+    | expresion_indexada PTR_ACCESO identificador_anidado                           { printf ("  expresion_indexada -> exp_index -> id_anid\n"); } 
     ;
 
 expresion_postfija 
