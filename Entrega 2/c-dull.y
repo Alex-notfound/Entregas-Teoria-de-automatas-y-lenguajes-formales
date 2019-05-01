@@ -586,7 +586,7 @@ expresion_cast
 
 void yyerror(char *s) {
   fflush(stdout);
-  printf("Error linea %d, %s\n", linea,s);
+  printf("Error linea %s\n", s);
   }
 
 int yywrap() {
@@ -595,7 +595,7 @@ int yywrap() {
 
 int main(int argc, char *argv[]) {
 
-  yydebug = 0;
+  //yydebug = 0;
 
   if (argc < 2) {
     printf("Uso: ./c-dull NombreArchivo\n");
