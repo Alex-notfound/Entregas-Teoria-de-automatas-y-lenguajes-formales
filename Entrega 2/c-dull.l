@@ -64,16 +64,3 @@ OPERADORES_ARITMETICOS ([*/%+-]|"--"|"++"|"*="|"/="|"%="|"+="|"-=")
 . printf("\nlinea %d, ERROR: %s", linea, yytext); return yylex();
 
 %%
-
-int yywrap() 
-{ 
-    return 1; 
-}
-
-int main(int argc, char *argv []) 
-{
-  yyin = fopen(argv[1],"r");
-  yylex();
-  printf("\n\n");
-  fclose(yyin);
-} 
