@@ -10,7 +10,6 @@
 
 %token ABSTRACT BASE BOOLEAN BREAK CASE CATCH CHAR CLASS CONTINUE DEFAULT DO DOUBLE ELSE ENUM EXTERN FINALLY FLOAT FOR GOTO IF INT INTERFACE INTERNAL LONG NAMESPACE NEW OVERRIDE PRIVATE PROTECTED PUBLIC RETURN SEALED SHORT SIGNED STATIC STRUCT SWITCH THIS THROW TRY TYPEDEF UNION UNSIGNED USING VIRTUAL VOID WHILE IDENTIFICADOR ENTERO CADENA REAL CARACTER BOOLEANO SIZEOF PTR_ACCESO INC DEC DESPI DESPD LE GE EQ NEQ AND OR MULT_ASIG DIV_ASIG MOD_ASIG SUMA_ASIG RESTA_ASIG DESPI_ASIG DESPD_ASIG AND_ASIG XOR_ASIG OR_ASIG
 
-
 %%
 
 /************/
@@ -116,11 +115,6 @@ tipo_basico
 nombre 
     : dato                                                                    { printf ("\n\tnom -> dato"); }
     | dato '=' valor                                                          { printf ("\n\tnom -> dato = valor"); }
-    ;
-
-lista_nombre 
-    : nombre                                                                  { printf ("\n\tlist_nom -> nom"); }
-    | lista_nombre nombre                                                     { printf ("\n\tlist_nom -> list_nom nom"); }
     ;
 
 dato 
@@ -275,7 +269,6 @@ cuerpo_clase
 
 declaracion_elemento_clase 
     : declaracion_tipo                                                        { printf ("\n\tdecl_elem_clase -> decl_tipo"); }
-    | declaracion_atributo                                                    { printf ("\n\tdecl_elem_clase -> declaracion_atributo"); }
     | declaracion_metodo                                                      { printf ("\n\tdecl_elem_clase -> decl_metodo"); }
     | declaracion_constructor                                                 { printf ("\n\tdecl_elem_clase -> decl_constructor"); }
     | declaracion_destructor                                                  { printf ("\n\tdecl_elem_clase -> decl_destructor"); }
@@ -336,9 +329,13 @@ firma_funcion
     | tipo lista_asterisco IDENTIFICADOR parametros                           { printf ("\n\tfirma_funcion -> tipo list_asterisco ID parametros"); }
     ;
 
+asterisco
+    : '*'
+    ;
+
 lista_asterisco
-    : '*'                                                                     { printf ("\n\tlist_asterisco -> *"); } 
-    | lista_asterisco '*'                                                     { printf ("\n\tlist_asterisco -> list_asterisco *"); }
+    : asterisco                                                               { printf ("\n\tlist_asterisco -> *"); } 
+    | lista_asterisco asterisco                                               { printf ("\n\tlist_asterisco -> list_asterisco *"); }
     ;
 
 parametros 
@@ -496,14 +493,10 @@ clausula_finally
     : FINALLY bloque_instrucciones                                            { printf ("\n\tclausula_finally -> FINALLY bloque_instrucciones"); } 
     ;
 
-instruccion_retorno 
-    : RETURN ';'                                                              { printf ("\n\tinstruccion_retorno -> RETURN"); } 
-    | RETURN expresion ';'                                                    { printf ("\n\tinstruccion_retorno -> RETURN exp"); } 
-    ;
-
 instruccion_vacia
     : ';'                                                                     { printf ("\n\tinstruccion_vacia -> ;"); } 
     ;
+
 /***************/
 /* EXPRESIONES */
 /***************/
@@ -569,19 +562,6 @@ expresion_cast
     | '(' nombre_tipo ')' expresion_prefija                                   { printf ("\n\texp_cast -> ( nom_tipo ) exp_prefija"); } 
     ;
 
-expresion
-    : expresion_constante                                                     { printf ("\n\texp -> exp_cons"); } 
-    | expresion_parentesis                                                    { printf ("\n\texp -> exp_parentesis"); } 
-    | expresion_funcional                                                     { printf ("\n\texp -> exp_funcional"); } 
-    | expresion_creacion_objeto                                               { printf ("\n\texp -> exp_creacion_objeto"); } 
-    | expresion_indexada                                                      { printf ("\n\texp -> exp_index"); } 
-    | expresion_postfija                                                      { printf ("\n\texp -> exp_posfija"); } 
-    | expresion_prefija                                                       { printf ("\n\texp -> exp_prefija"); } 
-    | expresion_cast                                                          { printf ("\n\texp -> exp_cast"); } 
-    | expresion_logica                                                        { printf ("\n\texp -> exp_logica"); }
-    | expresion_logica '?' expresion ':' expresion                            { printf ("\n\texp -> exp_logica ? exp : exp"); }
-    ;
-
 expresion_logica 
     : expresion_logica OR expresion_logica1                                   { printf ("\n\texp_logica -> exp_logica OR exp_logica1"); }
     | expresion_logica1                                                       { printf ("\n\texp_logica -> exp_logica1 "); }
@@ -632,11 +612,17 @@ expresion_logica8
     | expresion_logica8 '-' expresion_logica9                                 { printf (" exp_logica8 -> exp_logica8 - exp_logica9"); }
     | expresion_logica9                                                       { printf (" exp_logica8 -> exp_logica9"); }
     ;
+
 expresion_logica9
     : expresion_logica9 '*' expresion_cast                                    { printf (" exp_logica9 -> exp_logica9 * exp_cast"); }
     | expresion_logica9 '/' expresion_cast                                    { printf (" exp_logica9 -> exp_logica9 / exp_cast"); }
     | expresion_logica9 '%' expresion_cast                                    { printf (" exp_logica9 -> exp_logica9 % exp_cast"); }
     | expresion_cast                                                          { printf (" exp_logica9 -> exp_cast"); }
+    ;
+
+expresion
+    : expresion_logica                                                        { printf ("\n\texp -> exp_logica"); }
+    | expresion_logica '?' expresion ':' expresion                            { printf ("\n\texp -> exp_logica ? exp : exp"); }
     ;
 
 %%
