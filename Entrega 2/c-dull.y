@@ -9,7 +9,8 @@
 %}
 
 %token ABSTRACT BASE BOOLEAN BREAK CASE CATCH CHAR CLASS CONTINUE DEFAULT DO DOUBLE ELSE ENUM EXTERN FINALLY FLOAT FOR GOTO IF INT INTERFACE INTERNAL LONG NAMESPACE NEW OVERRIDE PRIVATE PROTECTED PUBLIC RETURN SEALED SHORT SIGNED STATIC STRUCT SWITCH THIS THROW TRY TYPEDEF UNION UNSIGNED USING VIRTUAL VOID WHILE IDENTIFICADOR ENTERO CADENA REAL CARACTER BOOLEANO SIZEOF PTR_ACCESO INC DEC DESPI DESPD LE GE EQ NEQ AND OR MULT_ASIG DIV_ASIG MOD_ASIG SUMA_ASIG RESTA_ASIG DESPI_ASIG DESPD_ASIG AND_ASIG XOR_ASIG OR_ASIG
-%token USING
+
+
 %%
 
 /************/
@@ -124,7 +125,7 @@ lista_nombre
 
 dato 
     : dato_indexado                                                           { printf ("\n\tdato -> dato_indexado"); }
-    | '*' dato                                                                { printf ("\n\tdato -> * dato"); }
+    | lista_asterisco dato_indexado                                           { printf ("\n\tdato -> * dato"); }
     ;
 
 dato_indexado 
@@ -165,6 +166,7 @@ nombramiento_tipo
 
 declaracion_struct_union 
     : struct_union '{' lista_declaracion_campo '}'                            { printf ("\n\tdecl_struct_union -> struct_union { list_decl_campo }"); }
+    | struct_union IDENTIFICADOR '{' lista_declaracion_campo '}'              { printf ("\n\tdecl_struct_union -> struct_union ID { list_decl_campo }"); }
     | lista_modificador struct_union '{' lista_declaracion_campo '}'          { printf ("\n\tdecl_struct_union -> list_mod struct_union { list_decl_campo }"); }
     | lista_modificador struct_union IDENTIFICADOR '{' lista_declaracion_campo '}' { printf ("  decl_struct_union -> list_mod struct_union ID { list_decl_campo }"); }
     ;

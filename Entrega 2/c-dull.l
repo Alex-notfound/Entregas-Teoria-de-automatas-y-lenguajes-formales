@@ -10,7 +10,7 @@
 %}
 
 %x COMENTARIO
-%x CADENA
+%x STRING
 
 IDENTIFICADORES ([A-Za-z_][A-Za-z_0-9]*)
 CARACTERES_ESCAPADOS (\\'|\\\"|\\?|\\\\|\\n|\\r|\\t|\\v)
@@ -36,10 +36,10 @@ OPERADORES_ARITMETICOS ([*/%+-]|"--"|"++"|"*="|"/="|"%="|"+="|"-=")
 
 \n  linea++; 
 
-\"		BEGIN(CADENA);strcat(cadena, yytext);
-<CADENA>\\\n			i++;linea++;strcat(cadena, yytext);
-<CADENA>\"	BEGIN 0;strcat(cadena, yytext); printf("\nlinea %d, constante cadena: %s", linea-i, cadena);i=0;strcpy(cadena,""); return (CADENA);
-<CADENA>{CONSTANTE_CADENA}		strcat(cadena,yytext);
+\"		BEGIN(STRING);strcat(cadena, yytext);
+<STRING>\\\n			i++;linea++;strcat(cadena, yytext);
+<STRING>\"	BEGIN 0;strcat(cadena, yytext); printf("\nlinea %d, constante cadena: %s", linea-i, cadena);i=0;strcpy(cadena,""); return (CADENA);
+<STRING>{CONSTANTE_CADENA}		strcat(cadena,yytext);
 
 "abstract"			{printf("\nlinea %d, palabra reservada: %s", linea, yytext); return(ABSTRACT);}
 "base"				{printf("\nlinea %d, palabra reservada: %s", linea, yytext); return(BASE);}
