@@ -3,7 +3,7 @@
   #include <stdio.h>
   extern FILE *yyin;
   extern int yylex();
-
+  extern int yyclearin();
   #define YYDEBUG 1
 
 %}
@@ -125,8 +125,13 @@ dato
 dato_indexado 
     : IDENTIFICADOR                                                           { printf ("\n\tdato_indexado -> ID"); }
     | IDENTIFICADOR '[' ']'                                                   { printf ("\n\tdato_indexado -> ID []"); }
-    | IDENTIFICADOR '[' lista_expresion ']'                                   { printf ("\n\tdato_indexado -> ID [ list_exp ]"); }
+    | IDENTIFICADOR lista_corchetes                                   		  { printf ("\n\tdato_indexado -> ID list_corchetes"); }
     ;
+
+lista_corchetes
+	: '[' lista_expresion ']'												  { printf ("\n\tlista_corchetes -> [ list_exp ]"); }
+	|  lista_corchetes '[' ']' 												  { printf ("\n\tlista_corchetes -> lista_corchetes []"); }
+	;
 
 lista_expresion 
     : expresion                                                               { printf ("\n\tlist_exp -> exp"); }
@@ -420,8 +425,8 @@ operador_asignacion
 
 instruccion_bifurcacion 
     : IF '(' expresion ')' instruccion                                        { printf ("\n\tinstruccion_bifurcacion -> IF ( exp ) instruccion"); }
-    | IF '(' expresion ')' instruccion ELSE instruccion                       { printf ("\n\tinstruccion_bifurcacion -> IF ( exp ) instruccion ELSE instruccion"); }
-    | SWITCH '(' expresion ')' '{' lista_instruccion_caso '}'                 { printf ("\n\tinstruccion_bifurcacion -> SWITCH ( exp ) { list_instruccion_caso }"); }
+    | IF '(' expresion ')' instruccion ELSE instruccion                       { printf ("\n\tinstruccion_bifurcacion -> IF ( exp ) instruccion ELSE"); }
+    | SWITCH '(' expresion ')' '{' lista_instruccion_caso '}'                 { printf ("\n\tinstruccion_bifurcacion -> SWITCH ( exp ) { list_instruccion_caso }");}
     ;
 
 instruccion_caso 
@@ -597,27 +602,27 @@ expresion_logica5
     ;
 
 expresion_logica6
-    : expresion_logica6 '&' expresion_logica7                                 { printf (" exp_logica6 -> exp_logica7 & exp_logica6"); }
-    | expresion_logica7                                                       { printf (" exp_logica6 -> exp_logica7 "); }
+    : expresion_logica6 '&' expresion_logica7                                 { printf ("\n\texp_logica6 -> exp_logica7 & exp_logica6"); }
+    | expresion_logica7                                                       { printf ("\n\texp_logica6 -> exp_logica7 "); }
     ;
 
 expresion_logica7
-    : expresion_logica7 DESPI expresion_logica8                               { printf (" exp_logica7 -> exp_logica7 DESPI exp_logica8"); }
-    | expresion_logica7 DESPD expresion_logica8                               { printf (" exp_logica7 -> exp_logica7 DESPD exp_logica8"); }
-    | expresion_logica8                                                       { printf (" exp_logica7 -> exp_logica8 "); }
+    : expresion_logica7 DESPI expresion_logica8                               { printf ("\n\texp_logica7 -> exp_logica7 DESPI exp_logica8"); }
+    | expresion_logica7 DESPD expresion_logica8                               { printf ("\n\texp_logica7 -> exp_logica7 DESPD exp_logica8"); }
+    | expresion_logica8                                                       { printf ("\n\texp_logica7 -> exp_logica8 "); }
     ;
 
 expresion_logica8
-    : expresion_logica8 '+' expresion_logica9                                 { printf (" exp_logica8 -> exp_logica8 + exp_logica9"); }
-    | expresion_logica8 '-' expresion_logica9                                 { printf (" exp_logica8 -> exp_logica8 - exp_logica9"); }
-    | expresion_logica9                                                       { printf (" exp_logica8 -> exp_logica9"); }
+    : expresion_logica8 '+' expresion_logica9                                 { printf ("\n\texp_logica8 -> exp_logica8 + exp_logica9"); }
+    | expresion_logica8 '-' expresion_logica9                                 { printf ("\n\texp_logica8 -> exp_logica8 - exp_logica9"); }
+    | expresion_logica9                                                       { printf ("\n\texp_logica8 -> exp_logica9"); }
     ;
 
 expresion_logica9
-    : expresion_logica9 '*' expresion_cast                                    { printf (" exp_logica9 -> exp_logica9 * exp_cast"); }
-    | expresion_logica9 '/' expresion_cast                                    { printf (" exp_logica9 -> exp_logica9 / exp_cast"); }
-    | expresion_logica9 '%' expresion_cast                                    { printf (" exp_logica9 -> exp_logica9 % exp_cast"); }
-    | expresion_cast                                                          { printf (" exp_logica9 -> exp_cast"); }
+    : expresion_logica9 '*' expresion_cast                                    { printf ("\n\texp_logica9 -> exp_logica9 * exp_cast"); }
+    | expresion_logica9 '/' expresion_cast                                    { printf ("\n\texp_logica9 -> exp_logica9 / exp_cast"); }
+    | expresion_logica9 '%' expresion_cast                                    { printf ("\n\texp_logica9 -> exp_logica9 % exp_cast"); }
+    | expresion_cast                                                          { printf ("\n\texp_logica9 -> exp_cast"); }
     ;
 
 expresion
@@ -629,8 +634,7 @@ expresion
 
 void yyerror(char *s) {
   fflush(stdout);
-  printf("Error FATAL: %s", s);
-  exit(1);
+  printf("\nError FATAL: %s", s);
   }
 
 int yywrap() {

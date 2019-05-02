@@ -75,6 +75,7 @@ OPERADORES_ARITMETICOS ([*/%+-]|"--"|"++"|"*="|"/="|"%="|"+="|"-=")
 "sealed"			{printf("\nlinea %d, palabra reservada: %s", linea, yytext); return(SEALED);}
 "short"				{printf("\nlinea %d, palabra reservada: %s", linea, yytext); return(SHORT);}
 "signed"			{printf("\nlinea %d, palabra reservada: %s", linea, yytext); return(SIGNED);}
+"sizeof"			{printf("\nlinea %d, palabra reservada: %s", linea, yytext); return(SIZEOF);}
 "static"			{printf("\nlinea %d, palabra reservada: %s", linea, yytext); return(STATIC);}
 "struct"			{printf("\nlinea %d, palabra reservada: %s", linea, yytext); return(STRUCT);}
 "switch"			{printf("\nlinea %d, palabra reservada: %s", linea, yytext); return(SWITCH);}
@@ -88,34 +89,6 @@ OPERADORES_ARITMETICOS ([*/%+-]|"--"|"++"|"*="|"/="|"%="|"+="|"-=")
 "virtual"			{printf("\nlinea %d, palabra reservada: %s", linea, yytext); return(VIRTUAL);}
 "void"				{printf("\nlinea %d, palabra reservada: %s", linea, yytext); return(VOID);}
 "while"				{printf("\nlinea %d, palabra reservada: %s", linea, yytext); return(WHILE);}
-"identificador"		{printf("\nlinea %d, palabra reservada: %s", linea, yytext); return(IDENTIFICADOR);}
-"entero"			{printf("\nlinea %d, palabra reservada: %s", linea, yytext); return(ENTERO);}
-"cadena"			{printf("\nlinea %d, palabra reservada: %s", linea, yytext); return(CADENA);}
-"real"				{printf("\nlinea %d, palabra reservada: %s", linea, yytext); return(REAL);}
-"caracter"			{printf("\nlinea %d, palabra reservada: %s", linea, yytext); return(CARACTER);}
-"booleano"			{printf("\nlinea %d, palabra reservada: %s", linea, yytext); return(BOOLEANO);}
-"sizeof"			{printf("\nlinea %d, palabra reservada: %s", linea, yytext); return(SIZEOF);}
-"ptr_acceso"		{printf("\nlinea %d, palabra reservada: %s", linea, yytext); return(PTR_ACCESO);}
-"inc"				{printf("\nlinea %d, palabra reservada: %s", linea, yytext); return(INC);}
-"dec"				{printf("\nlinea %d, palabra reservada: %s", linea, yytext); return(DEC);}
-"despi"				{printf("\nlinea %d, palabra reservada: %s", linea, yytext); return(DESPI);}
-"despd"				{printf("\nlinea %d, palabra reservada: %s", linea, yytext); return(DESPD);}
-"le"				{printf("\nlinea %d, palabra reservada: %s", linea, yytext); return(LE);}
-"ge"				{printf("\nlinea %d, palabra reservada: %s", linea, yytext); return(GE);}
-"eq"				{printf("\nlinea %d, palabra reservada: %s", linea, yytext); return(EQ);}             
-"neq"				{printf("\nlinea %d, palabra reservada: %s", linea, yytext); return(NEQ);}
-"and"				{printf("\nlinea %d, palabra reservada: %s", linea, yytext); return(AND);}
-"or"				{printf("\nlinea %d, palabra reservada: %s", linea, yytext); return(OR);}
-"mult_asig"			{printf("\nlinea %d, palabra reservada: %s", linea, yytext); return(MULT_ASIG);}
-"div_asig"			{printf("\nlinea %d, palabra reservada: %s", linea, yytext); return(DIV_ASIG);}
-"mod_asig"			{printf("\nlinea %d, palabra reservada: %s", linea, yytext); return(MOD_ASIG);}
-"suma_asig"			{printf("\nlinea %d, palabra reservada: %s", linea, yytext); return(SUMA_ASIG);}
-"resta_asig"		{printf("\nlinea %d, palabra reservada: %s", linea, yytext); return(RESTA_ASIG);}
-"despi_asig"		{printf("\nlinea %d, palabra reservada: %s", linea, yytext); return(DESPI_ASIG);}
-"despd_asig"		{printf("\nlinea %d, palabra reservada: %s", linea, yytext); return(DESPD_ASIG);}
-"and_asig"			{printf("\nlinea %d, palabra reservada: %s", linea, yytext); return(AND_ASIG);}
-"xor_asig"			{printf("\nlinea %d, palabra reservada: %s", linea, yytext); return(XOR_ASIG);}
-"or_asig"			{printf("\nlinea %d, palabra reservada: %s", linea, yytext); return(OR_ASIG);}
 
 {DELIMITADORES} printf("\nlinea %d, delimitador: %s", linea, yytext); return (yytext[0]);
 {COMENTARIOS_UNA_LINEA} linea++;
