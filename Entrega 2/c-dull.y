@@ -448,7 +448,7 @@ instruccion_bucle
 
 lista_asignacion 
     : asignacion                                                              { printf ("\n\tlist_asignacion -> asignacion"); } 
-    | lista_asignacion asignacion                                             { printf ("\n\tlist_asignacion -> list_asignacion asignacion"); } 
+    | lista_asignacion ',' asignacion                                             { printf ("\n\tlist_asignacion -> list_asignacion asignacion"); } 
     ;
 
 instruccion_salto 
@@ -552,7 +552,7 @@ expresion_prefija
     ;
 
 operador_prefijo 
-    : INC                                                                     { printf ("\n\top_prefijo -> INC"); } 
+    : '++'                                                                     { printf ("\n\top_prefijo -> INC"); } 
     | DEC                                                                     { printf ("\n\top_prefijo -> DEC"); } 
     | '&'                                                                     { printf ("\n\top_prefijo -> &"); } 
     | '*'                                                                     { printf ("\n\top_prefijo -> *"); } 
@@ -651,5 +651,6 @@ int main(int argc, char *argv[]) {
   else {
     yyin = fopen(argv[1],"r");
     yyparse();
-    }
+    printf("\n");
+     }
   }

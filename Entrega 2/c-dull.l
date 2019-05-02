@@ -41,6 +41,28 @@ OPERADORES_ARITMETICOS ([*/%+-]|"--"|"++"|"*="|"/="|"%="|"+="|"-=")
 <STRING>\"	BEGIN 0;strcat(cadena, yytext); printf("\nlinea %d, constante cadena: %s", linea-i, cadena);i=0;strcpy(cadena,""); return (CADENA);
 <STRING>{CONSTANTE_CADENA}		strcat(cadena,yytext);
 
+"+="			{printf("\nlinea %d, operador: %s", linea, yytext); return(SUMA_ASIG);}
+"-="			{printf("\nlinea %d, operador: %s", linea, yytext); return(RESTA_ASIG);}
+"*="			{printf("\nlinea %d, operador: %s", linea, yytext); return(MULT_ASIG);}
+"/="			{printf("\nlinea %d, operador: %s", linea, yytext); return(DIV_ASIG);}
+"%="			{printf("\nlinea %d, operador: %s", linea, yytext); return(MOD_ASIG);}
+"<<="			{printf("\nlinea %d, operador: %s", linea, yytext); return(DESPI_ASIG);}
+">>="			{printf("\nlinea %d, operador: %s", linea, yytext); return(DESPD_ASIG);}
+"&="			{printf("\nlinea %d, operador: %s", linea, yytext); return(AND_ASIG);}
+"|="			{printf("\nlinea %d, operador: %s", linea, yytext); return(OR_ASIG);}
+"^="			{printf("\nlinea %d, operador: %s", linea, yytext); return(XOR_ASIG);}
+"++"			{printf("\nlinea %d, operador: %s", linea, yytext); return(INC);}
+"--"			{printf("\nlinea %d, operador: %s", linea, yytext); return(DEC);}
+"<<"			{printf("\nlinea %d, operador: %s", linea, yytext); return(DESPI);}
+">>"			{printf("\nlinea %d, operador: %s", linea, yytext); return(DESPD);}
+">="			{printf("\nlinea %d, operador: %s", linea, yytext); return(GE);}
+"<="			{printf("\nlinea %d, operador: %s", linea, yytext); return(LE);}
+"=="			{printf("\nlinea %d, operador: %s", linea, yytext); return(EQ);}
+"!="			{printf("\nlinea %d, operador: %s", linea, yytext); return(NEQ);}
+"&&"			{printf("\nlinea %d, operador: %s", linea, yytext); return(AND);}
+"||"			{printf("\nlinea %d, operador: %s", linea, yytext); return(OR);}
+"->"			{printf("\nlinea %d, operador: %s", linea, yytext); return(PTR_ACCESO);}
+
 "abstract"			{printf("\nlinea %d, palabra reservada: %s", linea, yytext); return(ABSTRACT);}
 "base"				{printf("\nlinea %d, palabra reservada: %s", linea, yytext); return(BASE);}
 "boolean"			{printf("\nlinea %d, palabra reservada: %s", linea, yytext); return(BOOLEAN);}
