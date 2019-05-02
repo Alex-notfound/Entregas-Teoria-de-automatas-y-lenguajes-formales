@@ -1,0 +1,11 @@
+#!/bin/bash
+#Elimina fichero de salida anterior
+rm salida.txt
+#Realiza varios saltos de linea
+clear
+#Ejecuta makefile
+make
+#Ejecuta el analizador utilizando el fichero prueba.c
+./c-dull prueba.c >> salida.txt
+#Muestra la salida almacenada en salida.txt
+cat salida.txt
