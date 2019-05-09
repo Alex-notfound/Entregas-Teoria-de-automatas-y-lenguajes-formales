@@ -130,11 +130,12 @@ dato_indexado
 
 lista_corchetes
 	: '[' lista_expresion ']'												  { printf ("\n\tlista_corchetes -> [ list_exp ]"); }
-	|  lista_corchetes '[' ']' 												  { printf ("\n\tlista_corchetes -> lista_corchetes []"); }
+	|  lista_corchetes '[' lista_expresion ']' 								  { printf ("\n\tlista_corchetes -> lista_corchetes []"); }
 	;
 
 lista_expresion 
     : expresion                                                               { printf ("\n\tlist_exp -> exp"); }
+	|																		  
     | lista_expresion ',' expresion                                           { printf ("\n\tlist_exp -> list_exp exp"); }
     ;
 
@@ -146,7 +147,7 @@ valor
 lista_valor 
     : valor                                                                   { printf ("\n\tlist_valor -> valor"); }
     | lista_valor ',' valor                                                   { printf ("\n\tlist_valor -> list_valor valor"); }
-
+	;
 /*********/
 /* TIPOS */
 /*********/
